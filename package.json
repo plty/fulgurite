@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --write --plugin=prettier-plugin-astro src"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.0",
@@ -21,5 +22,9 @@
     "solid-js": "^1.8.12",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "prettier-plugin-astro": "^0.13.0"
   }
 }
