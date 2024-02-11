@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import type { HighlightStyle, Language } from "@codemirror/language";
 import { Line, RangeSet, RangeSetBuilder, Text } from "@codemirror/state";
-import { Decoration } from "@codemirror/view";
+import { Decoration, baseThemeID } from "@codemirror/view";
 import { highlightTree } from "@lezer/highlight";
 import _range from "lodash/range";
 
@@ -128,7 +128,7 @@ export const StaticBlox = ({ code, lang, lineGroup: lg }: StaticBloxProp) => {
   );
   const lines = Text.of(code.split("\n"));
   return (
-    <div className="blox max-h-[400px] overflow-y-auto">
+    <div className={`${baseThemeID} max-h-[400px] overflow-y-auto`}>
       <div className="cm-editor gutter ͼo">
         <div className="cm-scroller">
           <div className="cm-gutters">

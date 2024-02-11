@@ -1,6 +1,5 @@
 ---
 import { type Lang } from "$components/editor/lang-support";
-import { Blox } from "$components/Blox";
 import { StaticBlox } from "$components/StaticBlox";
 
 interface Props {
@@ -11,4 +10,6 @@ interface Props {
 const { content, language } = Astro.props;
 ---
 
-<StaticBlox code={content} lang={language} lineGroup={{}} client:load />
+<dev class="no-prose text-sm">
+    <StaticBlox code={content} lang={language} lineGroup={{}} client:load />
+</dev>
