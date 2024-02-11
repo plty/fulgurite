@@ -1,9 +1,8 @@
-import { oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
-import _uniq from "lodash/uniq";
 import _fromPairs from "lodash/fromPairs";
 import _toPairs from "lodash/toPairs";
+import _uniq from "lodash/uniq";
 
-import Blox from "$components/Blox";
+import { Blox } from "$components/Blox";
 import { StaticBlox } from "$components/StaticBlox";
 import TopLevelProvider from "$components/TopLevelProvider";
 import { usePromise } from "$hooks/usePromise";
@@ -49,7 +48,6 @@ const Fulgurite = ({
       <Blox lang="cpp" code={code} lineGroup={lineGroup} />
       <StaticBlox
         lang="asm"
-        highlightStyle={oneDarkHighlightStyle}
         code={data?.asm?.map((line) => line.text).join("\n") ?? "<Compiling>"}
         lineGroup={_fromPairs(
           asmsrc.map(([asmLine, srcLine]) => [asmLine, lineGroup[srcLine]]),

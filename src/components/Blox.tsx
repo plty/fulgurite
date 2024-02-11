@@ -1,5 +1,3 @@
-import { oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
-
 import { StaticBlox } from "$components/StaticBlox";
 import { usePromise } from "$hooks/usePromise";
 
@@ -8,15 +6,15 @@ type BloxProp = {
   code: string;
   lang: Lang;
   lineGroup: { [line: number]: number };
-  onChange?: (_: string) => void;
+  // onChange?: (_: string) => void;
   readonly?: boolean;
 };
 
-const Blox: React.FC<BloxProp> = ({
+export const Blox: React.FC<BloxProp> = ({
   code,
   lang,
   lineGroup,
-  onChange,
+  // onChange: _onChange,
   readonly,
 }) => {
   const { state, value: DynamicBlox } = usePromise(
@@ -31,20 +29,13 @@ const Blox: React.FC<BloxProp> = ({
           code={code}
           lang={lang}
           lineGroup={lineGroup}
-          onChange={onChange}
+          onChange={() => {}}
           readonly={readonly}
         />
       )}
       {state !== "resolve" && (
-        <StaticBlox
-          code={code}
-          lang={lang}
-          lineGroup={lineGroup}
-          highlightStyle={oneDarkHighlightStyle}
-        />
+        <StaticBlox code={code} lang={lang} lineGroup={lineGroup} />
       )}
     </>
   );
 };
-
-export default Blox;

@@ -1,8 +1,22 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
+import BaseLayout from "$layouts/BaseLayout.astro";
+import { getEntry } from "astro:content";
+
+import { bloxCSS } from "$components/editor/cssgen.ts";
+const { editorCSS, highlightCSS } = bloxCSS;
+const entry = await getEntry("blog", "intro");
+const { Content } = await entry.render();
 ---
 
-<Layout title="Welcome to Astro.">
-  <main><div class="text-4xl">otto</div></main>
-</Layout>
+<BaseLayout title={entry.data.title}>
+  <style set:html={editorCSS}></style>
+  <style set:html={highlightCSS}></style>
+  <main
+    class="prose prose-invert md:prose-md prose-p:text-justify prose-p:break-words prose-p:hyphens-auto container mx-auto max-w-4xl px-4 pt-6"
+  >
+    <main>
+      <h1>{entry.data.title}</h1>
+      <Content />
+    </main>
+  </main>
+</BaseLayout>

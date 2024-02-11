@@ -1,10 +1,11 @@
+// yoinked from @uiw/codemirror-themes
+
 import {
   HighlightStyle,
-  TagStyle,
   syntaxHighlighting,
+  type TagStyle,
 } from "@codemirror/language";
 import type { Extension } from "@codemirror/state";
-import { tags } from "@lezer/highlight";
 import { EditorView } from "codemirror";
 
 type CreateThemeOptions = {
@@ -25,11 +26,17 @@ type Settings = {
   fontFamily?: string;
 };
 
+type ThemePack = {
+  themeStyle: Extension;
+  highlightStyle: HighlightStyle;
+  extension: Extension;
+};
+
 export const createTheme = ({
   theme,
   settings,
   styles,
-}: CreateThemeOptions): Extension => {
+}: CreateThemeOptions): ThemePack => {
   const themeOptions: { [key: string]: { [key: string]: string } } = {
     "&": {
       backgroundColor: settings.background,
@@ -67,45 +74,13 @@ export const createTheme = ({
     },
   };
 
-  return [
-    EditorView.theme(themeOptions, {
-      dark: theme === "dark",
-    }),
-    syntaxHighlighting(HighlightStyle.define(styles)),
-  ];
+  const themeStyle = EditorView.theme(themeOptions, {
+    dark: theme === "dark",
+  });
+  const highlightStyle = HighlightStyle.define(styles);
+  return {
+    themeStyle,
+    highlightStyle,
+    extension: [themeStyle, syntaxHighlighting(highlightStyle)],
+  };
 };
-
-export const dracula = createTheme({
-  theme: "dark",
-  settings: {
-    background: "#282A36",
-    foreground: "#F8F8F2",
-    caret: "#F8F8F0",
-    selection: "rgba(255, 255, 255, 0.1)",
-    selectionMatch: "rgba(255, 255, 255, 0.2)",
-    gutterBackground: "#282A36",
-    gutterForeground: "#6D8A88",
-    lineHighlight: "rgba(255, 255, 255, 0.0)",
-  },
-  styles: [
-    { tag: tags.comment, color: "#6272A4" },
-    { tag: tags.string, color: "#F1FA8C" },
-    { tag: tags.atom, color: "#BD93F9" },
-    { tag: tags.meta, color: "#F8F8F2" },
-    { tag: [tags.keyword, tags.operator, tags.tagName], color: "#FF79C6" },
-    {
-      tag: [tags.function(tags.propertyName), tags.propertyName],
-      color: "#66D9EF",
-    },
-    {
-      tag: [
-        tags.definition(tags.variableName),
-        tags.function(tags.variableName),
-        tags.className,
-        tags.attributeName,
-      ],
-      color: "#50FA7B",
-    },
-    { tag: tags.atom, color: "#BD93F9" },
-  ],
-});

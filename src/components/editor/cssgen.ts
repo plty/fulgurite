@@ -1,14 +1,12 @@
-import type { HighlightStyle } from "@codemirror/language";
+import { type HighlightStyle } from "@codemirror/language";
 import type { Extension } from "@codemirror/state";
-import {
-  oneDarkHighlightStyle,
-  oneDarkTheme,
-} from "@codemirror/theme-one-dark";
 import { StyleModule, type StyleSpec } from "style-mod";
 
-export const baseThemeID = "blox",
-  baseLightID = "blox--light",
-  baseDarkID = "blox--dark";
+import { nordHighlight, nordTheme } from "$components/editor/nord";
+
+export const baseThemeID = "blox";
+export const baseLightID = "blox--light";
+export const baseDarkID = "blox--dark";
 
 export const lightDarkIDs = {
   "&light": "." + baseLightID,
@@ -302,4 +300,4 @@ export const cssgen = (highlightStyle: HighlightStyle, theme: Extension) => {
   };
 };
 
-export const bloxCSS = cssgen(oneDarkHighlightStyle, oneDarkTheme);
+export const bloxCSS = cssgen(nordHighlight, nordTheme);

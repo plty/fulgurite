@@ -1,6 +1,5 @@
 import { Language, StreamLanguage } from "@codemirror/language";
 import type { Extension } from "@codemirror/state";
-
 export type Lang = keyof typeof highlighter & keyof typeof parser;
 
 export const highlighter = {

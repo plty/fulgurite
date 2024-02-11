@@ -6,8 +6,9 @@
     "baseUrl": ".",
     "paths": {
       "$components/*": ["src/components/*"],
-      "$layouts/*": ["src/layouts/*"],
+      "$contents/*": ["src/contents/*"],
       "$hooks/*": ["src/hooks/*"],
+      "$layouts/*": ["src/layouts/*"],
       "$utils/*": ["src/utils/*"]
     }
   }

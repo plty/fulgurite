@@ -9,6 +9,9 @@ import _range from "lodash/range";
 import { parser, type Lang } from "$components/editor/lang-support";
 import { usePromise } from "$hooks/usePromise";
 import { zip } from "$utils/fn";
+import { nordHighlight } from "$components/editor/nord";
+
+const HIGHLIGHT_STYLE = nordHighlight;
 
 const decorations = (
   lang: Language,
@@ -108,15 +111,10 @@ const CodeLine = ({
 type StaticBloxProp = {
   code: string;
   lang: Lang;
-  highlightStyle: HighlightStyle;
   lineGroup: { [line: number]: number };
 };
-export const StaticBlox = ({
-  code,
-  lang,
-  highlightStyle,
-  lineGroup: lg,
-}: StaticBloxProp) => {
+export const StaticBlox = ({ code, lang, lineGroup: lg }: StaticBloxProp) => {
+  const highlightStyle = HIGHLIGHT_STYLE;
   const [hlGroup, setHlGroup] = useState(-1);
   const { state, value: langParser } = usePromise(() => parser[lang](), [lang]);
   const colorOf = (v: number, al: number) =>

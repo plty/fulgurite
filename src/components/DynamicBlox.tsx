@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 
 import { Line, RangeSetBuilder, type Extension } from "@codemirror/state";
-import { oneDark } from "@codemirror/theme-one-dark";
 import {
   Decoration,
   EditorView,
@@ -13,6 +12,7 @@ import { basicSetup } from "codemirror";
 
 import { highlighter, type Lang } from "$components/editor/lang-support";
 import { usePromise } from "$hooks/usePromise";
+import { nord } from "$components/editor/nord";
 
 const visibleLines = (view: EditorView) =>
   view.visibleRanges.flatMap(({ from, to }): Line[] => {
@@ -97,7 +97,7 @@ export const DynamicBlox: React.FC<BloxProp> = ({
       extensions: [
         basicSetup,
         showStripes(lineGroup),
-        oneDark,
+        nord,
         ...(state === "resolve" ? [langExt] : []),
         EditorView.contentAttributes.of({
           contenteditable: `${!readonly}`,

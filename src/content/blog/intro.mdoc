@@ -1,0 +1,29 @@
+---
+unique_id: 32595503-C0ED-4D35-9E7A-838476F6E74E
+short_id: custom-hooks
+title: How I Build This Blog
+---
+It took me 2 years to finish this. jesus christ.
+
+# Welcome to Markdoc 👋
+
+Use tags like this fancy "aside" to add some _flair_ to your docs.
+
+```cpp
+#include <iostream>
+#include<iostream>
+#include<stdint.h>
+#include<limits>
+
+constexpr auto f(uint64_t const& x) -> uint64_t {
+    return x < 2 ? x : f(x - 1) + f(x - 2);
+}
+
+constexpr auto g(uint64_t const& x) -> uint64_t {
+    return x == 0 ? 1 : x * g(x - 1);
+}
+
+auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
+    return new_v - old_v;
+}
+```
