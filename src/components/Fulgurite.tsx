@@ -4,7 +4,7 @@ import _uniq from "lodash/uniq";
 
 import { Blox } from "$components/Blox";
 import { StaticBlox } from "$components/StaticBlox";
-import TopLevelProvider from "$components/TopLevelProvider";
+import { TopLevelProvider } from "$components/TopLevelProvider";
 import { usePromise } from "$hooks/usePromise";
 import { cppCode } from "$utils/constants";
 import { compile, type CompileOutput } from "$utils/godbolt";

@@ -12,5 +12,9 @@ export default defineMarkdocConfig({
       render: component("$components/marco/Fence.astro"),
       transform: undefined,
     },
+    heading: {
+      ...nodes.heading,
+      render: component("$components/marco/Heading.astro"),
+    },
   },
 });
