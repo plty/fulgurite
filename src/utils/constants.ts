@@ -11,10 +11,6 @@ constexpr auto g(uint64_t const& x) -> uint64_t {
     return x == 0 ? 1 : x * g(x - 1);
 }
 
-constexpr auto g30() -> uint64_t {
-  return g(30);
-}
-
 auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
     return new_v - old_v;
 }

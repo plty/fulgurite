@@ -1,11 +1,9 @@
 ---
 unique_id: 32595503-C0ED-4D35-9E7A-838476F6E74E
 short_id: custom-hooks
-title: How I Build This Blog
+title: How I Built This Blog
 ---
-It took me 2 years to finish this. jesus christ.
-
-# Welcome to Markdoc 👋
+# Welcome to 𝕪, because 𝕪 not?
 
 Use tags like this fancy "aside" to add some _flair_ to your docs.
 
@@ -25,4 +23,15 @@ constexpr auto g(uint64_t const& x) -> uint64_t {
 auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
     return new_v - old_v;
 }
+```
+
+## Something interesting in jsx
+```jsx
+export const useSSR = () => {
+  const [state, setState] = useState<boolean>(true);
+  useEffect(() => {
+    setState(false);
+  }, []);
+  return state;
+};
 ```
