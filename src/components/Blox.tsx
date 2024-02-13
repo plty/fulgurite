@@ -34,7 +34,12 @@ export const Blox: React.FC<BloxProp> = ({
         />
       )}
       {state !== "resolve" && (
-        <StaticBlox code={code} lang={lang} lineGroup={lineGroup} />
+        <StaticBlox
+          code={code}
+          lang={lang}
+          parserHint={{}}
+          lineGroup={lineGroup}
+        />
       )}
     </>
   );

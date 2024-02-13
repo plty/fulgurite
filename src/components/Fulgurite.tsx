@@ -49,6 +49,7 @@ const Fulgurite = ({
       <StaticBlox
         lang="asm"
         code={data?.asm?.map((line) => line.text).join("\n") ?? "<Compiling>"}
+        parserHint={{}}
         lineGroup={_fromPairs(
           asmsrc.map(([asmLine, srcLine]) => [asmLine, lineGroup[srcLine]]),
         )}

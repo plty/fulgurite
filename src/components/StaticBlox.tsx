@@ -6,8 +6,12 @@ import { Decoration, baseThemeID } from "@codemirror/view";
 import { highlightTree } from "@lezer/highlight";
 import _range from "lodash/range";
 
-import { parser, type Lang } from "$components/editor/lang-support";
-import { usePromise } from "$hooks/usePromise";
+import {
+  parser,
+  type Lang,
+  type EagerParser,
+} from "$components/editor/lang-support";
+import { useHintedPromise } from "$hooks/usePromise";
 import { zip } from "$utils/fn";
 import { nordHighlight } from "$components/editor/nord";
 
@@ -111,12 +115,22 @@ const CodeLine = ({
 type StaticBloxProp = {
   code: string;
   lang: Lang;
+  parserHint: Partial<EagerParser>;
   lineGroup: { [line: number]: number };
 };
-export const StaticBlox = ({ code, lang, lineGroup: lg }: StaticBloxProp) => {
+export const StaticBlox = ({
+  code,
+  lang,
+  parserHint,
+  lineGroup: lg,
+}: StaticBloxProp) => {
   const highlightStyle = HIGHLIGHT_STYLE;
   const [hlGroup, setHlGroup] = useState(-1);
-  const { state, value: langParser } = usePromise(() => parser[lang](), [lang]);
+  const { state, value: langParser } = useHintedPromise(
+    parserHint,
+    () => parser[lang](),
+    lang,
+  );
   const colorOf = (v: number, al: number) =>
     `hsla(${(v * 37) % 360}, 50%, 50%, ${al}%)`;
   const decors = useMemo(

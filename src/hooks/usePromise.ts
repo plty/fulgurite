@@ -32,33 +32,35 @@ const resolve = function <T>(v: T): Resolve<T> {
   return { state: "resolve", value: v, error: undefined };
 };
 
-export const usePromise = function <T, D extends DependencyList>(
-  f: () => Promise<T>,
-  deps: D,
-): UsePromiseResponse<T> {
-  const [state, setState] = useState<UsePromiseResponse<T>>(pending());
+export const useHintedPromise = function <T extends PropertyKey, U>(
+  hint: { [P in T]?: U },
+  f: () => Promise<U>,
+  d: T,
+): UsePromiseResponse<U> {
+  const [state, setState] = useState<UsePromiseResponse<U>>(() => {
+    const hinted = hint[d];
+    return hinted ? resolve(hinted) : pending();
+  });
   useEffect(() => {
     let stale = false;
-    f()
-      .then((v) => !stale && setState(resolve(v)))
-      .catch((e) => !stale && setState(reject(e)));
+    if (!hint[d])
+      f()
+        .then((v) => !stale && setState(resolve(v)))
+        .catch((e) => !stale && setState(reject(e)));
 
     return () => {
       stale = true;
       setState(pending());
     };
-  }, deps);
+  }, [d]);
   return state;
 };
 
-export const useHintedPromise = function <T, D extends DependencyList>(
-  hint: Map<D, T>,
+export const usePromise = function <T, D extends DependencyList>(
   f: () => Promise<T>,
   deps: D,
 ): UsePromiseResponse<T> {
-  const [state, setState] = useState<UsePromiseResponse<T>>(
-    hint.has(deps) ? resolve(hint.get(deps)!) : pending(),
-  );
+  const [state, setState] = useState<UsePromiseResponse<T>>(pending());
   useEffect(() => {
     let stale = false;
     f()
