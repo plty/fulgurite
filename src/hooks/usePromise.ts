@@ -43,14 +43,18 @@ export const useHintedPromise = function <T extends PropertyKey, U>(
   });
   useEffect(() => {
     let stale = false;
-    if (!hint[d])
+
+    const hinted = hint[d];
+    if (hinted) {
+      return setState(resolve(hinted));
+    } else {
       f()
         .then((v) => !stale && setState(resolve(v)))
         .catch((e) => !stale && setState(reject(e)));
+    }
 
     return () => {
       stale = true;
-      setState(pending());
     };
   }, [d]);
   return state;

@@ -35,3 +35,24 @@ export const useSSR = () => {
   return state;
 };
 ```
+
+```asm
+.intel_syntax
+delta(unsigned long const&, unsigned long const&):                         # @delta(unsigned long const&, unsigned long const&)
+        mov     rax, qword ptr [rsi]
+        sub     rax, qword ptr [rdi]
+        ret
+```
+
+```asm
+.code16
+.intel_syntax noprefix
+
+mov cx, 11
+mov si, name
+mov di, 0x7E00
+push di
+rep cmpsb
+pop di
+je LOAD
+```

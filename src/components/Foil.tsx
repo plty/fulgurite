@@ -1,12 +1,12 @@
-import { StaticBlox } from "$components/StaticBlox";
-import type { EagerParser, Lang } from "$components/editor/lang-support";
+import { Sabre } from "$components/Sabre";
+import type { Lang } from "$components/editor/lang-support";
 import { cppLanguage } from "@codemirror/lang-cpp";
 import { jsxLanguage, tsxLanguage } from "@codemirror/lang-javascript";
 import { rustLanguage } from "@codemirror/lang-rust";
 import { StreamLanguage } from "@codemirror/language";
 import { gas } from "@codemirror/legacy-modes/mode/gas";
 
-export const parser: EagerParser = {
+export const parser = {
   asm: StreamLanguage.define(gas),
   cpp: cppLanguage,
   jsx: jsxLanguage,
@@ -14,22 +14,13 @@ export const parser: EagerParser = {
   tsx: tsxLanguage,
 };
 
-type VeryStaticBloxProp = {
+type FoilProp = {
   code: string;
   lang: Lang;
   lineGroup: { [line: number]: number };
 };
-export const VeryStaticBlox = ({
-  code,
-  lang,
-  lineGroup,
-}: VeryStaticBloxProp) => {
+export const Foil = ({ code, lang, lineGroup }: FoilProp) => {
   return (
-    <StaticBlox
-      code={code}
-      lang={lang}
-      parserHint={parser}
-      lineGroup={lineGroup}
-    />
+    <Sabre code={code} lang={lang} parserHint={parser} lineGroup={lineGroup} />
   );
 };

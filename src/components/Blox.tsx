@@ -1,7 +1,7 @@
-import { StaticBlox } from "$components/StaticBlox";
+import { Sabre } from "$components/Sabre";
 import { usePromise } from "$hooks/usePromise";
+import { type Lang } from "$components/editor/lang-support";
 
-type Lang = "rust" | "cpp" | "asm";
 type BloxProp = {
   code: string;
   lang: Lang;
@@ -10,22 +10,22 @@ type BloxProp = {
   readonly?: boolean;
 };
 
-export const Blox: React.FC<BloxProp> = ({
+export const Blox = ({
   code,
   lang,
   lineGroup,
   // onChange: _onChange,
   readonly,
-}) => {
-  const { state, value: DynamicBlox } = usePromise(
-    async () => (await import("./DynamicBlox")).DynamicBlox,
+}: BloxProp) => {
+  const { state, value: Epee } = usePromise(
+    async () => (await import("$components/Epee")).Epee,
     [],
   );
 
   return (
     <>
       {state === "resolve" && (
-        <DynamicBlox
+        <Epee
           code={code}
           lang={lang}
           lineGroup={lineGroup}
@@ -34,12 +34,7 @@ export const Blox: React.FC<BloxProp> = ({
         />
       )}
       {state !== "resolve" && (
-        <StaticBlox
-          code={code}
-          lang={lang}
-          parserHint={{}}
-          lineGroup={lineGroup}
-        />
+        <Sabre code={code} lang={lang} parserHint={{}} lineGroup={lineGroup} />
       )}
     </>
   );

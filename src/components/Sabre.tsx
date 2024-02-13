@@ -112,18 +112,13 @@ const CodeLine = ({
   );
 };
 
-type StaticBloxProp = {
+type SabreProp = {
   code: string;
   lang: Lang;
   parserHint: Partial<EagerParser>;
   lineGroup: { [line: number]: number };
 };
-export const StaticBlox = ({
-  code,
-  lang,
-  parserHint,
-  lineGroup: lg,
-}: StaticBloxProp) => {
+export const Sabre = ({ code, lang, parserHint, lineGroup: lg }: SabreProp) => {
   const highlightStyle = HIGHLIGHT_STYLE;
   const [hlGroup, setHlGroup] = useState(-1);
   const { state, value: langParser } = useHintedPromise(

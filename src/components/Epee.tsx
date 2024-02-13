@@ -1,18 +1,30 @@
 import { useEffect, useRef } from "react";
 
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { Line, RangeSetBuilder, type Extension } from "@codemirror/state";
 import {
+  crosshairCursor,
   Decoration,
+  drawSelection,
+  dropCursor,
   EditorView,
+  highlightActiveLineGutter,
+  highlightSpecialChars,
+  keymap,
+  lineNumbers,
   ViewPlugin,
   ViewUpdate,
   type DecorationSet,
 } from "@codemirror/view";
-import { basicSetup } from "codemirror";
 
 import { highlighter, type Lang } from "$components/editor/lang-support";
-import { usePromise } from "$hooks/usePromise";
 import { nord } from "$components/editor/nord";
+import { usePromise } from "$hooks/usePromise";
+import {
+  bracketMatching,
+  foldKeymap,
+  indentOnInput,
+} from "@codemirror/language";
 
 const visibleLines = (view: EditorView) =>
   view.visibleRanges.flatMap(({ from, to }): Line[] => {
@@ -70,7 +82,7 @@ const showStripes = (lineGroup: { [line: number]: number }): Extension => {
   );
 };
 
-type BloxProp = {
+type EpeeProp = {
   code: string;
   lang: Lang;
   lineGroup: { [line: number]: number };
@@ -78,13 +90,26 @@ type BloxProp = {
   readonly?: boolean;
 };
 
-export const DynamicBlox: React.FC<BloxProp> = ({
+const baseExtensions = [
+  lineNumbers(),
+  highlightActiveLineGutter(),
+  highlightSpecialChars(),
+  history(),
+  drawSelection(),
+  dropCursor(),
+  indentOnInput(),
+  bracketMatching(),
+  crosshairCursor(),
+  keymap.of([...defaultKeymap, ...historyKeymap, ...foldKeymap]),
+];
+
+export const Epee = ({
   code,
   lang,
   lineGroup,
   onChange: _onChange,
   readonly,
-}) => {
+}: EpeeProp) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<EditorView | null>(null);
   const { state, value: langExt } = usePromise(
@@ -95,7 +120,7 @@ export const DynamicBlox: React.FC<BloxProp> = ({
     const editor = new EditorView({
       doc: code,
       extensions: [
-        basicSetup,
+        ...baseExtensions,
         showStripes(lineGroup),
         nord,
         ...(state === "resolve" ? [langExt] : []),
@@ -111,4 +136,4 @@ export const DynamicBlox: React.FC<BloxProp> = ({
   return <div className="max-h-[400px] overflow-y-auto" ref={ref}></div>;
 };
 
-export default DynamicBlox;
+export default Epee;

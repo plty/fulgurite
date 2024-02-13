@@ -1,13 +1,16 @@
 import _fromPairs from "lodash/fromPairs";
-import _toPairs from "lodash/toPairs";
 import _uniq from "lodash/uniq";
-
-import { Blox } from "$components/Blox";
-import { StaticBlox } from "$components/StaticBlox";
-import { TopLevelProvider } from "$components/TopLevelProvider";
-import { usePromise } from "$hooks/usePromise";
-import { cppCode } from "$utils/constants";
 import { compile, type CompileOutput } from "$utils/godbolt";
+import { StreamLanguage } from "@codemirror/language";
+import { gas } from "@codemirror/legacy-modes/mode/gas";
+
+import { Sabre } from "$components/Sabre";
+import { TopLevelProvider } from "$components/TopLevelProvider";
+import { useHintedPromise } from "$hooks/usePromise";
+import { cppCode } from "$utils/constants";
+import { Blox } from "$components/Blox";
+
+const asmLanguage = StreamLanguage.define(gas);
 
 const Fulgurite = ({
   code,
@@ -17,13 +20,14 @@ const Fulgurite = ({
   setCode: (_: string) => void;
   hint: { [code: string]: CompileOutput };
 }) => {
-  const { value: realData } = usePromise(
+  const { value: realData } = useHintedPromise(
+    hint,
     () =>
       compile(["c++", "clang1701"], code, {
         opts: "-std=c++2b -O3 -march=sapphirerapids",
         asmSyntax: "intel",
       }),
-    [code],
+    code,
   );
 
   const data = realData || hint[code];
@@ -46,10 +50,10 @@ const Fulgurite = ({
       }
     >
       <Blox lang="cpp" code={code} lineGroup={lineGroup} />
-      <StaticBlox
+      <Sabre
         lang="asm"
         code={data?.asm?.map((line) => line.text).join("\n") ?? "<Compiling>"}
-        parserHint={{}}
+        parserHint={{ asm: asmLanguage }}
         lineGroup={_fromPairs(
           asmsrc.map(([asmLine, srcLine]) => [asmLine, lineGroup[srcLine]]),
         )}
