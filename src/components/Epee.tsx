@@ -17,9 +17,13 @@ import {
   type DecorationSet,
 } from "@codemirror/view";
 
-import { highlighter, type Lang } from "$components/editor/lang-support";
+import {
+  highlighter,
+  type EagerHighlighter,
+  type Lang,
+} from "$components/editor/lang-support";
 import { nord } from "$components/editor/nord";
-import { usePromise } from "$hooks/usePromise";
+import { useHintedPromise } from "$hooks/usePromise";
 import {
   bracketMatching,
   foldKeymap,
@@ -82,14 +86,6 @@ const showStripes = (lineGroup: { [line: number]: number }): Extension => {
   );
 };
 
-type EpeeProp = {
-  code: string;
-  lang: Lang;
-  lineGroup: { [line: number]: number };
-  onChange?: (_: string) => void;
-  readonly?: boolean;
-};
-
 const baseExtensions = [
   lineNumbers(),
   highlightActiveLineGutter(),
@@ -103,18 +99,28 @@ const baseExtensions = [
   keymap.of([...defaultKeymap, ...historyKeymap, ...foldKeymap]),
 ];
 
+type EpeeProp = {
+  code: string;
+  lang: Lang;
+  highlighterHint: Partial<EagerHighlighter>;
+  lineGroup: { [line: number]: number };
+  onChange?: (_: string) => void;
+  readonly?: boolean;
+};
 export const Epee = ({
   code,
   lang,
+  highlighterHint,
   lineGroup,
   onChange: _onChange,
   readonly,
 }: EpeeProp) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<EditorView | null>(null);
-  const { state, value: langExt } = usePromise(
+  const { state, value: langExt } = useHintedPromise(
+    highlighterHint,
     () => highlighter[lang](),
-    [lang],
+    lang,
   );
   useEffect(() => {
     const editor = new EditorView({

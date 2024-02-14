@@ -10,6 +10,28 @@ interface Props {
 const { content, language } = Astro.props;
 ---
 
-<dev class="no-prose text-sm">
-  <Foil code={content} lang={language} lineGroup={{}} />
+<dev class="my-5 block w-full text-sm">
+  <div class="flex border-x border-t border-night-500">
+    <div class="border-t-2 border-frost-3 bg-night-700 px-6 py-1 font-mono">
+      hehe.cpp
+    </div>
+    <div class="w-full border-b border-night-500 bg-night-600"></div>
+  </div>
+  <div class="border-x border-b border-night-500 text-sm">
+    <Foil code={content} lang={language} lineGroup={{}} editorConfig={{}} />
+  </div>
+</dev>
+<dev class="my-5 block w-full text-sm">
+  <div
+    class="h-[30px] border-x border-b border-t border-night-500 border-night-500 bg-night-600"
+  >
+  </div>
+  <div class="border-x border-b border-night-500 text-sm">
+    <Foil
+      code={content}
+      lang={language}
+      editorConfig={{ lineNumber: false }}
+      lineGroup={{}}
+    />
+  </div>
 </dev>

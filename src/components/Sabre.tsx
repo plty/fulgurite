@@ -8,12 +8,13 @@ import _range from "lodash/range";
 
 import {
   parser,
-  type Lang,
   type EagerParser,
+  type Lang,
 } from "$components/editor/lang-support";
+import { nordHighlight } from "$components/editor/nord";
 import { useHintedPromise } from "$hooks/usePromise";
 import { zip } from "$utils/fn";
-import { nordHighlight } from "$components/editor/nord";
+import { normalizeEditorConfig, type EditorConfig } from "./Fencey";
 
 const HIGHLIGHT_STYLE = nordHighlight;
 
@@ -115,15 +116,23 @@ const CodeLine = ({
 type SabreProp = {
   code: string;
   lang: Lang;
+  editorConfig: Partial<EditorConfig>;
   parserHint: Partial<EagerParser>;
   lineGroup: { [line: number]: number };
 };
-export const Sabre = ({ code, lang, parserHint, lineGroup: lg }: SabreProp) => {
+export const Sabre = ({
+  code,
+  lang,
+  editorConfig,
+  parserHint,
+  lineGroup: lg,
+}: SabreProp) => {
+  const { lineNumber } = normalizeEditorConfig(editorConfig);
   const highlightStyle = HIGHLIGHT_STYLE;
   const [hlGroup, setHlGroup] = useState(-1);
   const { state, value: langParser } = useHintedPromise(
     parserHint,
-    () => parser[lang](),
+    parser[lang],
     lang,
   );
   const colorOf = (v: number, al: number) =>
@@ -140,19 +149,21 @@ export const Sabre = ({ code, lang, parserHint, lineGroup: lg }: SabreProp) => {
     <div className={`${baseThemeID} max-h-[400px] overflow-y-auto`}>
       <div className="cm-editor gutter ͼo">
         <div className="cm-scroller">
-          <div className="cm-gutters">
-            <div className="cm-gutter cm-lineNumbers">
-              {_range(lines.lines).map((i) => (
-                // HACK: investigate root issue of 4px magic
-                <div
-                  key={i}
-                  className="cm-gutterElement"
-                  style={i == 0 ? { marginTop: "4px" } : {}}
-                >
-                  {i + 1}
-                </div>
-              ))}
-            </div>
+          <div className="cm-gutters select-none">
+            {lineNumber && (
+              <div className="cm-gutter cm-lineNumbers">
+                {_range(lines.lines).map((i) => (
+                  // HACK: investigate root issue of 4px magic
+                  <div
+                    key={i}
+                    className="cm-gutterElement"
+                    style={i == 0 ? { marginTop: "4px" } : {}}
+                  >
+                    {i + 1}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div key={"content"} className="cm-content">
             {_range(lines.lines)

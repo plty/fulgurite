@@ -1,14 +1,14 @@
-import _fromPairs from "lodash/fromPairs";
-import _uniq from "lodash/uniq";
 import { compile, type CompileOutput } from "$utils/godbolt";
 import { StreamLanguage } from "@codemirror/language";
 import { gas } from "@codemirror/legacy-modes/mode/gas";
+import _fromPairs from "lodash/fromPairs";
+import _uniq from "lodash/uniq";
 
+import { Blox } from "$components/Blox";
 import { Sabre } from "$components/Sabre";
 import { TopLevelProvider } from "$components/TopLevelProvider";
 import { useHintedPromise } from "$hooks/usePromise";
 import { cppCode } from "$utils/constants";
-import { Blox } from "$components/Blox";
 
 const asmLanguage = StreamLanguage.define(gas);
 
@@ -53,6 +53,7 @@ const Fulgurite = ({
       <Sabre
         lang="asm"
         code={data?.asm?.map((line) => line.text).join("\n") ?? "<Compiling>"}
+        editorConfig={{}}
         parserHint={{ asm: asmLanguage }}
         lineGroup={_fromPairs(
           asmsrc.map(([asmLine, srcLine]) => [asmLine, lineGroup[srcLine]]),

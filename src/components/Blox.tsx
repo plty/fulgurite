@@ -1,40 +1,41 @@
 import { Sabre } from "$components/Sabre";
 import { usePromise } from "$hooks/usePromise";
-import { type Lang } from "$components/editor/lang-support";
+import { highlighter, type Lang } from "$components/editor/lang-support";
 
 type BloxProp = {
   code: string;
   lang: Lang;
   lineGroup: { [line: number]: number };
-  // onChange?: (_: string) => void;
   readonly?: boolean;
 };
 
-export const Blox = ({
-  code,
-  lang,
-  lineGroup,
-  // onChange: _onChange,
-  readonly,
-}: BloxProp) => {
-  const { state, value: Epee } = usePromise(
+export const Blox = ({ code, lang, lineGroup, readonly }: BloxProp) => {
+  const { state: epeeState, value: Epee } = usePromise(
     async () => (await import("$components/Epee")).Epee,
     [],
   );
+  const { state: hlState, value: hl } = usePromise(highlighter[lang], [lang]);
 
   return (
     <>
-      {state === "resolve" && (
+      {epeeState === "resolve" && hlState == "resolve" && (
         <Epee
           code={code}
           lang={lang}
+          highlighterHint={{ [lang]: hl }}
           lineGroup={lineGroup}
           onChange={() => {}}
           readonly={readonly}
         />
       )}
-      {state !== "resolve" && (
-        <Sabre code={code} lang={lang} parserHint={{}} lineGroup={lineGroup} />
+      {(epeeState !== "resolve" || hlState !== "resolve") && (
+        <Sabre
+          code={code}
+          lang={lang}
+          parserHint={{}}
+          editorConfig={{}}
+          lineGroup={lineGroup}
+        />
       )}
     </>
   );
