@@ -1,6 +1,9 @@
 ---
 import { type Lang } from "$components/editor/lang-support";
+import { FulguriteIsland } from "$components/Fulgurite.tsx";
 import { Foil } from "$components/Foil";
+import { cppCode, notCppCode } from "$utils/constants.ts";
+import { compile } from "$utils/godbolt.ts";
 
 interface Props {
   content: string;
@@ -8,6 +11,18 @@ interface Props {
 }
 
 const { content, language } = Astro.props;
+console.log(language);
+
+const [compiledCpp, compiledNotCpp] = await Promise.all(
+  [cppCode, notCppCode].map((code) => {
+    return compile(["c++", "clang1701"], code, {
+      opts: "-std=c++2b -O3 -march=sapphirerapids",
+      asmSyntax: "intel",
+    });
+  }),
+);
+
+const hint = { [cppCode]: compiledCpp, [notCppCode]: compiledNotCpp };
 ---
 
 <dev class="my-5 block w-full text-sm">
@@ -15,23 +30,20 @@ const { content, language } = Astro.props;
     <div class="border-t-2 border-frost-3 bg-night-700 px-6 py-1 font-mono">
       hehe.cpp
     </div>
-    <div class="w-full border-b border-night-500 bg-night-600"></div>
+    <div class="w-full border-b border-l border-night-500 bg-night-600"></div>
   </div>
   <div class="border-x border-b border-night-500 text-sm">
     <Foil code={content} lang={language} lineGroup={{}} editorConfig={{}} />
   </div>
 </dev>
-<dev class="my-5 block w-full text-sm">
-  <div
-    class="h-[30px] border-x border-b border-t border-night-500 border-night-500 bg-night-600"
-  >
-  </div>
-  <div class="border-x border-b border-night-500 text-sm">
-    <Foil
-      code={content}
-      lang={language}
-      editorConfig={{ lineNumber: false }}
-      lineGroup={{}}
-    />
+<dev class="my-5 block flex w-full justify-center text-sm">
+  <div class="w-screen max-w-7xl shrink-0 px-4">
+    <div
+      class="h-3 border-x border-b border-t border-night-500 border-night-500 bg-night-600"
+    >
+    </div>
+    <div class="border-x border-b border-night-500 text-sm bg-night-700">
+      <FulguriteIsland hint={hint} client:visible />
+    </div>
   </div>
 </dev>
