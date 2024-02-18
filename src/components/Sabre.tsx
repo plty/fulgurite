@@ -12,8 +12,6 @@ import { useHintedPromise } from "$hooks/usePromise";
 import { zip } from "$utils/fn";
 import type { FenceConfig } from "$components/Fencey";
 
-const HIGHLIGHT_STYLE = nordHighlight;
-
 const decorations = (
     lang: Language,
     highlightStyle: HighlightStyle,
@@ -122,7 +120,7 @@ export const Sabre = ({
     lineGroup: lg,
 }: SabreProp) => {
     const { lineNumber, lang } = fenceConfig;
-    const highlightStyle = HIGHLIGHT_STYLE;
+    const highlightStyle = nordHighlight;
     const [hlGroup, setHlGroup] = useState(-1);
     const { state, value: langParser } = useHintedPromise(
         parserHint,
@@ -195,13 +193,13 @@ export const FramedSabre = ({
 }: SabreProp) => {
     return (
         <div>
-            <div className="flex border-x border-t border-night-500">
-                <div className="line-clamp-1 border-t-2 border-frost-3 bg-night-700 px-6 py-1 font-mono">
+            <div className="border-night-500 flex border-x border-t">
+                <div className="border-frost-3 bg-night-700 line-clamp-1 border-t-2 px-6 py-1 font-mono">
                     {fenceConfig.filename}
                 </div>
-                <div className="flex-grow border-b border-l border-night-500 bg-night-600" />
+                <div className="border-night-500 bg-night-600 flex-grow border-b border-l" />
             </div>
-            <div className="border-x border-b border-night-500 text-sm">
+            <div className="border-night-500 border-x border-b text-sm">
                 <Sabre
                     code={code}
                     lineGroup={lineGroup}

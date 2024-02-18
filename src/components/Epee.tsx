@@ -3,17 +3,17 @@ import { useEffect, useRef } from "react";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { Line, RangeSetBuilder, type Extension } from "@codemirror/state";
 import {
-    crosshairCursor,
     Decoration,
+    EditorView,
+    ViewPlugin,
+    ViewUpdate,
+    crosshairCursor,
     drawSelection,
     dropCursor,
-    EditorView,
     highlightActiveLineGutter,
     highlightSpecialChars,
     keymap,
     lineNumbers,
-    ViewPlugin,
-    ViewUpdate,
     type DecorationSet,
 } from "@codemirror/view";
 
