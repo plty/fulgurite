@@ -1,6 +1,8 @@
+import type { Lang } from "$components/editor/lang-support";
+import type { CompilableLang } from "$utils/godbolt";
 import _reduce from "lodash/reduce";
 
-export const shortnames = {
+const extendedFlags = {
   fastIntel: [
     "-std=c++23",
     ...["-Wpedantic", "-Wall", "-Wextra", "-Wconversion", "-Werror"],
@@ -21,33 +23,49 @@ export const shortnames = {
   lsan: ["-fsanitize=leak"],
 } as { [k: string]: string[] };
 
-type FenceConfig = {
-  lang: string;
-  compileOpts: string[];
+export type FenceConfig = {
+  lang: Lang;
   filename: string;
   ins: [number, number][];
   del: [number, number][];
+  frame: "tabbed" | "framed" | "none";
   lineNumber: boolean;
   readonly: boolean;
 };
 
-const defaultConfig = {
+export type FulguriteConfig = {
+  lang: CompilableLang;
+  compileOpts: string[];
+  filename: string;
+};
+
+export type Config =
+  | {
+      state: "fence";
+      config: FenceConfig;
+    }
+  | {
+      state: "fulgurite";
+      config: FulguriteConfig;
+    };
+
+const defaultFenceConfig = {
   lang: "cpp",
-  compileOpts: [],
   filename: "",
   ins: [],
   del: [],
   lineNumber: true,
   readonly: false,
+  frame: "tabbed",
 } satisfies FenceConfig;
 
-export const parseInfo = (s: string) => {
-  const [langWithOpt, ...rest] = s.split(";");
-  const regex = /^(\w+)(?:\[(.*)\])?$/;
-  const [_full, lang, compileOptShorts] = regex.exec(langWithOpt) ?? [];
-  const compileOpts = compileOptShorts
-    ?.split(",")
-    .flatMap((x) => shortnames[x] ?? []);
+const defaultFulguriteConfig = {
+  lang: "cpp",
+  compileOpts: [],
+  filename: "",
+} satisfies FulguriteConfig;
+
+const parseFenceConfig = (init: FenceConfig, rest: string[]) => {
   return _reduce(
     rest,
     (acc, r) => {
@@ -70,13 +88,55 @@ export const parseInfo = (s: string) => {
             return [+start, +end];
           }),
         };
+      } else if (k == "linenumber") {
+        return { ...acc, lineNumber: v === "true" };
+      } else if (k == "readonly") {
+        return { ...acc, readonly: v === "true" };
+      } else if (k == "framed") {
+        return { ...acc, framed: v as "tabbed" | "framed" | "none" };
       }
       return acc;
     },
-    {
-      ...defaultConfig,
-      lang,
-      compileOpts,
-    } as FenceConfig,
+    init,
   );
+};
+
+const parseFulguriteConfig = (init: FulguriteConfig, rest: string[]) => {
+  return _reduce(
+    rest,
+    (acc, r) => {
+      const [k, v] = r.split("=");
+      if (k === "title") {
+        return { ...acc, filename: v };
+      }
+      return acc;
+    },
+    init,
+  );
+};
+
+export const parseInfo = (s: string): Config => {
+  const [langWithOpt, ...rest] = s.split(";");
+  const regex = /^(\w+)(?:\[(.*)\])?$/;
+  const [_full, lang, compileOptShorts] = regex.exec(langWithOpt) ?? [];
+  if (compileOptShorts === undefined) {
+    return {
+      state: "fence",
+      config: parseFenceConfig(
+        { ...defaultFenceConfig, lang: lang as Lang },
+        rest,
+      ),
+    };
+  }
+
+  const compileOpts = compileOptShorts
+    ?.split(",")
+    .flatMap((x) => extendedFlags[x]);
+  return {
+    state: "fulgurite",
+    config: parseFulguriteConfig(
+      { ...defaultFulguriteConfig, lang: lang as CompilableLang, compileOpts },
+      rest,
+    ),
+  };
 };

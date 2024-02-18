@@ -26,10 +26,11 @@ export type CompileOutput = {
     source: { file: string | null; line: number } | null;
   }[];
 };
+export type CompilableLang = "cpp" | "rust";
 
 export type Compiler =
-  | ["c++", "clang1701"]
-  | ["c++", "g132"]
+  | ["cpp", "clang1701"]
+  | ["cpp", "g132"]
   | ["rust", "r1750"];
 
 export const compile = async (

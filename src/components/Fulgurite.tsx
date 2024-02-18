@@ -9,30 +9,32 @@ import { Sabre } from "$components/Sabre";
 import { TopLevelProvider } from "$components/TopLevelProvider";
 import { useHintedPromise } from "$hooks/usePromise";
 import { cppCode } from "$utils/constants";
+import type { FulguriteConfig } from "$components/Fencey";
 
 const asmLanguage = StreamLanguage.define(gas);
 
 const Fulgurite = ({
   code,
   hint,
+  fulguriteConfig,
 }: {
   code: string;
   setCode: (_: string) => void;
   hint: { [code: string]: CompileOutput };
+  fulguriteConfig: FulguriteConfig;
 }) => {
-  const { value: realData } = useHintedPromise(
+  const { value: compileResult } = useHintedPromise(
     hint,
     () =>
-      compile(["c++", "clang1701"], code, {
-        opts: "-std=c++2b -O3 -march=sapphirerapids",
+      compile(["cpp", "clang1701"], code, {
+        opts: fulguriteConfig.compileOpts.join(" "),
         asmSyntax: "intel",
       }),
     code,
   );
 
-  const data = realData || hint[code];
   type ASMMeta = { file: string | null; line: number } | null;
-  const asmsrc = (data?.asm ?? [])
+  const asmsrc = (compileResult?.asm ?? [])
     .map(({ source }, i): [ASMMeta, number] => [source, i + 1])
     .filter(([source, _]) => source && source?.file == null)
     .map(([source, i]) => [i, source!.line]);
@@ -49,27 +51,58 @@ const Fulgurite = ({
         "grid grid-cols-1 place-items-stretch space-y-2 text-sm md:space-y-0 lg:grid-cols-2"
       }
     >
-      <Blox lang="cpp" code={code} lineGroup={lineGroup} />
-      <Sabre
-        lang="asm"
-        code={data?.asm?.map((line) => line.text).join("\n") ?? "<Compiling>"}
-        editorConfig={{}}
-        parserHint={{ asm: asmLanguage }}
-        lineGroup={_fromPairs(
-          asmsrc.map(([asmLine, srcLine]) => [asmLine, lineGroup[srcLine]]),
-        )}
+      <Blox
+        code={code}
+        lineGroup={lineGroup}
+        fenceConfig={{
+          ...fulguriteConfig,
+          ins: [],
+          del: [],
+          frame: "none",
+          lineNumber: true,
+          readonly: true,
+        }}
       />
+      <div className="border-night-700 border border-l">
+        <Sabre
+          code={
+            compileResult?.asm?.map((line) => line.text).join("\n") ??
+            "<Compiling>"
+          }
+          parserHint={{ asm: asmLanguage }}
+          fenceConfig={{
+            ...fulguriteConfig,
+            lang: "asm",
+            filename: "out.asm",
+            ins: [],
+            del: [],
+            frame: "none",
+            lineNumber: true,
+            readonly: true,
+          }}
+          lineGroup={_fromPairs(
+            asmsrc.map(([asmLine, srcLine]) => [asmLine, lineGroup[srcLine]]),
+          )}
+        />
+      </div>
     </div>
   );
 };
 
 export const FulguriteIsland = ({
   hint,
+  fenceConfig,
 }: {
   hint: { [code: string]: CompileOutput };
+  fenceConfig: FulguriteConfig;
 }) => (
   <TopLevelProvider>
-    <Fulgurite hint={hint} code={cppCode} setCode={() => {}} />
+    <Fulgurite
+      hint={hint}
+      code={cppCode}
+      setCode={() => {}}
+      fulguriteConfig={fenceConfig}
+    />
   </TopLevelProvider>
 );
 

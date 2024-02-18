@@ -15,11 +15,3 @@ auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
     return new_v - old_v;
 }
 `;
-
-export const notCppCode = `\
-def f(x):
-    return x * x + x
-
-def main():
-    print(f(20))
-`;

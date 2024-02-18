@@ -1,15 +1,16 @@
 import { Sabre } from "$components/Sabre";
 import { usePromise } from "$hooks/usePromise";
-import { highlighter, type Lang } from "$components/editor/lang-support";
+import { highlighter } from "$components/editor/lang-support";
+import type { FenceConfig } from "$components/Fencey";
 
 type BloxProp = {
   code: string;
-  lang: Lang;
+  fenceConfig: FenceConfig;
   lineGroup: { [line: number]: number };
-  readonly?: boolean;
 };
 
-export const Blox = ({ code, lang, lineGroup, readonly }: BloxProp) => {
+export const Blox = ({ code, fenceConfig, lineGroup }: BloxProp) => {
+  const { lang, readonly } = fenceConfig;
   const { state: epeeState, value: Epee } = usePromise(
     async () => (await import("$components/Epee")).Epee,
     [],
@@ -31,9 +32,8 @@ export const Blox = ({ code, lang, lineGroup, readonly }: BloxProp) => {
       {(epeeState !== "resolve" || hlState !== "resolve") && (
         <Sabre
           code={code}
-          lang={lang}
           parserHint={{}}
-          editorConfig={{}}
+          fenceConfig={fenceConfig}
           lineGroup={lineGroup}
         />
       )}

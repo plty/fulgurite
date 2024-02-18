@@ -6,15 +6,11 @@ import { Decoration, baseThemeID } from "@codemirror/view";
 import { highlightTree } from "@lezer/highlight";
 import _range from "lodash/range";
 
-import {
-  parser,
-  type EagerParser,
-  type Lang,
-} from "$components/editor/lang-support";
+import { parser, type EagerParser } from "$components/editor/lang-support";
 import { nordHighlight } from "$components/editor/nord";
 import { useHintedPromise } from "$hooks/usePromise";
 import { zip } from "$utils/fn";
-import { normalizeEditorConfig, type EditorConfig } from "./Fencey";
+import type { FenceConfig } from "$components/Fencey";
 
 const HIGHLIGHT_STYLE = nordHighlight;
 
@@ -115,19 +111,17 @@ const CodeLine = ({
 
 type SabreProp = {
   code: string;
-  lang: Lang;
-  editorConfig: Partial<EditorConfig>;
+  fenceConfig: FenceConfig;
   parserHint: Partial<EagerParser>;
   lineGroup: { [line: number]: number };
 };
 export const Sabre = ({
   code,
-  lang,
-  editorConfig,
+  fenceConfig,
   parserHint,
   lineGroup: lg,
 }: SabreProp) => {
-  const { lineNumber } = normalizeEditorConfig(editorConfig);
+  const { lineNumber, lang } = fenceConfig;
   const highlightStyle = HIGHLIGHT_STYLE;
   const [hlGroup, setHlGroup] = useState(-1);
   const { state, value: langParser } = useHintedPromise(
@@ -183,6 +177,32 @@ export const Sabre = ({
               ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const FramedSabre = ({
+  code,
+  fenceConfig,
+  parserHint,
+  lineGroup,
+}: SabreProp) => {
+  return (
+    <div>
+      <div className="flex border-x border-t border-night-500">
+        <div className="line-clamp-1 border-t-2 border-frost-3 bg-night-700 px-6 py-1 font-mono">
+          {fenceConfig.filename}
+        </div>
+        <div className="flex-grow border-b border-l border-night-500 bg-night-600" />
+      </div>
+      <div className="border-x border-b border-night-500 text-sm">
+        <Sabre
+          code={code}
+          lineGroup={lineGroup}
+          fenceConfig={fenceConfig}
+          parserHint={parserHint}
+        />
       </div>
     </div>
   );
