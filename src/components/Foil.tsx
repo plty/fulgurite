@@ -6,7 +6,7 @@ import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _reduce from "lodash/reduce";
 
 import type { FenceConfig } from "$components/Fencey";
-import { FramedSabre, Sabre } from "$components/Sabre";
+import { Sabre } from "$components/Sabre";
 
 export const parser = {
     asm: StreamLanguage.define(gas),
@@ -23,15 +23,6 @@ type FoilProp = {
 };
 export const Foil = ({ code, fenceConfig, lineGroup }: FoilProp) => (
     <Sabre
-        code={code}
-        fenceConfig={fenceConfig}
-        parserHint={parser}
-        lineGroup={lineGroup}
-    />
-);
-
-export const FramedFoil = ({ code, fenceConfig, lineGroup }: FoilProp) => (
-    <FramedSabre
         code={code}
         fenceConfig={fenceConfig}
         parserHint={parser}

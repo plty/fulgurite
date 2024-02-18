@@ -113,7 +113,7 @@ type SabreProp = {
     parserHint: Partial<EagerParser>;
     lineGroup: { [line: number]: number };
 };
-export const Sabre = ({
+export const SabreCore = ({
     code,
     fenceConfig,
     parserHint,
@@ -138,8 +138,8 @@ export const Sabre = ({
     );
     const lines = Text.of(code.split("\n"));
     return (
-        <div className={`${baseThemeID} max-h-[400px] overflow-y-auto`}>
-            <div className="cm-editor gutter ͼo">
+        <div className={`${baseThemeID} max-h-[600px] overflow-y-auto`}>
+            <div className="cm-editor gutter ͼsg">
                 <div className="cm-scroller">
                     <div className="cm-gutters select-none">
                         {lineNumber && (
@@ -185,7 +185,7 @@ export const Sabre = ({
     );
 };
 
-export const FramedSabre = ({
+export const Sabre = ({
     code,
     fenceConfig,
     parserHint,
@@ -200,7 +200,7 @@ export const FramedSabre = ({
                 <div className="border-night-500 bg-night-600 flex-grow border-b border-l" />
             </div>
             <div className="border-night-500 border-x border-b text-sm">
-                <Sabre
+                <SabreCore
                     code={code}
                     lineGroup={lineGroup}
                     fenceConfig={fenceConfig}

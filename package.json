@@ -54,7 +54,8 @@
     },
     "pnpm": {
         "patchedDependencies": {
-            "@codemirror/view@6.24.0": "patches/@codemirror__view@6.24.0.patch"
+            "@codemirror/view@6.24.0": "patches/@codemirror__view@6.24.0.patch",
+            "style-mod@4.1.0": "patches/style-mod@4.1.0.patch"
         }
     }
 }

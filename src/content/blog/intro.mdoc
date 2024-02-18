@@ -3,9 +3,70 @@ unique_id: 32595503-C0ED-4D35-9E7A-838476F6E74E
 short_id: custom-hooks
 title: How I Built This Blog
 ---
-# Welcome to 𝕪, because 𝕪 not?
 
-Use tags like this fancy "aside" to add some _flair_ to your docs.
+# because 𝕪 not
+
+I have always wanted a blog to write my thoughts and mostly rants. I got into
+systems-programming circa 2021 and I wanted to have a place to write a blog
+and show the compilation outputs.
+
+```cpp[fastAmd];title=simple.cpp
+#include <iostream>
+#include <stdint.h>
+#include <limits>
+
+constexpr auto f(uint64_t const& x) -> uint64_t {
+    return x < 2 ? x : f(x - 1) + f(x - 2);
+}
+
+constexpr auto g(uint64_t const& x) -> uint64_t {
+    return x == 0 ? 1 : x * g(x - 1);
+}
+
+auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
+    return new_v - old_v;
+}
+```
+
+I spent ~~a lot of~~ way too much time on web-performance and SSR, nearlly all
+of the things are lazily-loaded. language parser, syntax-highlighter. For it
+to be lazy and fast, there's this idea of hinting.
+
+```jsx;title=useHintedPromise.jsx
+export const useHintedPromise = function <T extends PropertyKey, U>(
+    hint: { [P in T]?: U },
+    f: () => Promise<U>,
+    d: T,
+): UsePromiseResponse<U> {
+    const [state, setState] = useState<UsePromiseResponse<U>>(() => {
+        const hinted = hint[d];
+        return hinted ? resolve(hinted) : pending();
+    });
+
+    const promise = useMemo(() => {
+        const hinted = hint[d];
+        if (hinted !== undefined) return Promise.resolve(hinted);
+        return f();
+    }, [d, hint]);
+
+    useEffect(() => {
+        let stale = false;
+        promise
+            .then((v) => {
+                !stale && setState(resolve(v));
+            })
+            .catch((e) => !stale && setState(reject(e)));
+        return () => {
+            stale = true;
+        };
+    }, [promise]);
+    return state;
+};
+```
+
+basically writing static-version of codemirror to make it render without js
+and swaps the element with the real codemirror when it is loaded. I also
+making sure my site still works on a slow 3G connection, without JS.
 
 ```cpp;title=simple.cpp
 #include <iostream>
@@ -25,20 +86,13 @@ auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
 }
 ```
 
-```cpp[fastAmd];title=simple.cpp
-#include <iostream>
-#include <stdint.h>
-#include <limits>
+This got in the way of us
+```jsx;title=style-mod.js
+  const top = typeof globalThis != "undefined" ? globalThis : typeof window != "undefined" ? window : {}
 
-constexpr auto f(uint64_t const& x) -> uint64_t {
-    return x < 2 ? x : f(x - 1) + f(x - 2);
-}
-
-constexpr auto g(uint64_t const& x) -> uint64_t {
-    return x == 0 ? 1 : x * g(x - 1);
-}
-
-auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
-    return new_v - old_v;
-}
+  static newName() {
+    let id = top[COUNT] || 1
+    top[COUNT] = id + 1
+    return C + id.toString(36)
+  }
 ```

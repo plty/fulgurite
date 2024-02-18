@@ -5,8 +5,7 @@ import _uniq from "lodash/uniq";
 
 import { Blox } from "$components/Blox";
 import { type FulguriteConfig } from "$components/Fencey";
-import { Sabre } from "$components/Sabre";
-import { TopLevelProvider } from "$components/TopLevelProvider";
+import { SabreCore } from "$components/Sabre";
 import { useHintedPromise } from "$hooks/usePromise";
 import { cppCode } from "$utils/constants";
 import { compile, type CompileOutput } from "$utils/godbolt";
@@ -60,11 +59,11 @@ const Fulgurite = ({
                     del: [],
                     frame: "none",
                     lineNumber: true,
-                    readonly: true,
+                    readonly: false,
                 }}
             />
             <div className="border-night-700 border border-l">
-                <Sabre
+                <SabreCore
                     code={
                         compileResult?.asm
                             ?.map((line) => line.text)
@@ -100,14 +99,12 @@ export const FulguriteIsland = ({
     hint: { [code: string]: CompileOutput };
     fenceConfig: FulguriteConfig;
 }) => (
-    <TopLevelProvider>
-        <Fulgurite
-            hint={hint}
-            code={cppCode}
-            setCode={() => {}}
-            fulguriteConfig={fenceConfig}
-        />
-    </TopLevelProvider>
+    <Fulgurite
+        hint={hint}
+        code={cppCode}
+        setCode={() => {}}
+        fulguriteConfig={fenceConfig}
+    />
 );
 
 export default FulguriteIsland;

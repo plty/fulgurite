@@ -119,7 +119,7 @@ export const Epee = ({
     const editorRef = useRef<EditorView | null>(null);
     const { state, value: langExt } = useHintedPromise(
         highlighterHint,
-        () => highlighter[lang](),
+        highlighter[lang],
         lang,
     );
     useEffect(() => {

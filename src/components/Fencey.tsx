@@ -29,7 +29,7 @@ export type FenceConfig = {
     filename: string;
     ins: [number, number][];
     del: [number, number][];
-    frame: "tabbed" | "framed" | "none";
+    frame: "tabbed" | "none";
     lineNumber: boolean;
     readonly: boolean;
 };

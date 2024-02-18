@@ -1,4 +1,4 @@
-import { type DependencyList, useEffect, useState } from "react";
+import { type DependencyList, useEffect, useState, useMemo } from "react";
 
 type Pending = {
     state: "pending";
@@ -41,22 +41,24 @@ export const useHintedPromise = function <T extends PropertyKey, U>(
         const hinted = hint[d];
         return hinted ? resolve(hinted) : pending();
     });
+
+    const promise = useMemo(() => {
+        const hinted = hint[d];
+        if (hinted !== undefined) return Promise.resolve(hinted);
+        return f();
+    }, [d, hint]);
+
     useEffect(() => {
         let stale = false;
-
-        const hinted = hint[d];
-        if (hinted) {
-            return setState(resolve(hinted));
-        } else {
-            f()
-                .then((v) => !stale && setState(resolve(v)))
-                .catch((e) => !stale && setState(reject(e)));
-        }
-
+        promise
+            .then((v) => {
+                !stale && setState(resolve(v));
+            })
+            .catch((e) => !stale && setState(reject(e)));
         return () => {
             stale = true;
         };
-    }, [d]);
+    }, [promise]);
     return state;
 };
 

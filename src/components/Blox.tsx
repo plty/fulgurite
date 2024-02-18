@@ -1,5 +1,5 @@
 import { type FenceConfig } from "$components/Fencey";
-import { Sabre } from "$components/Sabre";
+import { SabreCore } from "$components/Sabre";
 import { highlighter } from "$components/editor/lang-support";
 import { usePromise } from "$hooks/usePromise";
 
@@ -30,7 +30,7 @@ export const Blox = ({ code, fenceConfig, lineGroup }: BloxProp) => {
                 />
             )}
             {(epeeState !== "resolve" || hlState !== "resolve") && (
-                <Sabre
+                <SabreCore
                     code={code}
                     parserHint={{}}
                     fenceConfig={fenceConfig}

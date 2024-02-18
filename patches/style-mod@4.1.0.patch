@@ -1,0 +1,56 @@
+diff --git a/dist/style-mod.cjs b/dist/style-mod.cjs
+index fa65667b3919d584cde190cdf251de6f41d2e861..6f652de45c0a297e2a9e8e934c897b8be69ff7e0 100644
+--- a/dist/style-mod.cjs
++++ b/dist/style-mod.cjs
+@@ -57,6 +57,14 @@ StyleModule.newName = function newName () {
+   return C + id.toString(36)
+ };
+ 
++StyleModule.getCount = function getCount () {
++  return top[COUNT] || 1
++};
++
++StyleModule.setCount = function setCount (seed) {
++  top[COUNT] = seed
++};
++
+ // :: (union<Document, ShadowRoot>, union<[StyleModule], StyleModule>, ?{nonce: ?string})
+ //
+ // Mount the given set of modules in the given DOM root, which ensures
+@@ -162,4 +170,3 @@ StyleSet.prototype.setNonce = function setNonce (nonce) {
+ // styles defined inside the object that's the property's value. For
+ // example to create a media query you can do `{"@media screen and
+ // (min-width: 400px)": {...}}`.
+-
+diff --git a/src/style-mod.d.ts b/src/style-mod.d.ts
+index 081f0f2366ba4ff121e433e629f391242b3d9268..5a49669be8a6345eda0880edb519416c0f9ae285 100644
+--- a/src/style-mod.d.ts
++++ b/src/style-mod.d.ts
+@@ -9,6 +9,8 @@ export class StyleModule {
+     options?: {nonce?: string}
+   ): void
+   static newName(): string
++  static getCount(): number
++  static setCount(seed: number): void
+ }
+ 
+ export type StyleSpec = {
+diff --git a/src/style-mod.js b/src/style-mod.js
+index 1a5985c510a9d607411e32c430119559fba65497..359d839f76a2f6b855108af937b5d34b49808edb 100644
+--- a/src/style-mod.js
++++ b/src/style-mod.js
+@@ -62,6 +62,14 @@ export class StyleModule {
+     return C + id.toString(36)
+   }
+ 
++  static getCount () {
++    return top[COUNT] || 1
++  };
++
++  static setCount (seed) {
++    top[COUNT] = seed
++  };
++
+   // :: (union<Document, ShadowRoot>, union<[StyleModule], StyleModule>, ?{nonce: ?string})
+   //
+   // Mount the given set of modules in the given DOM root, which ensures

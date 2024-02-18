@@ -4,7 +4,7 @@ import type { Extension } from "@codemirror/state";
 import { nordHighlight, nordTheme } from "$components/editor/nord";
 import { baseTheme } from "@codemirror/view";
 
-export const cssgen = (highlightStyle: HighlightStyle, theme: Extension) => {
+export const cssgen = (theme: Extension, highlightStyle: HighlightStyle) => {
     type Theme = [{ value: string }, ...{ value?: { getRules?(): string } }[]];
 
     const [_head, ...rest] = theme as unknown as Theme;
@@ -17,4 +17,4 @@ export const cssgen = (highlightStyle: HighlightStyle, theme: Extension) => {
 };
 
 export const baseCSS = baseTheme.getRules();
-export const nordCSS = cssgen(nordHighlight, nordTheme);
+export const nordCSS = cssgen(nordTheme, nordHighlight);
