@@ -1,60 +1,60 @@
 {
-  "name": "short-spectrum",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "format": "prettier --write --plugin=prettier-plugin-astro --plugin=prettier-plugin-tailwindcss src"
-  },
-  "dependencies": {
-    "@astrojs/alpinejs": "^0.4.0",
-    "@astrojs/check": "^0.4.1",
-    "@astrojs/markdoc": "^0.8.3",
-    "@astrojs/react": "^3.0.10",
-    "@astrojs/solid-js": "^4.0.1",
-    "@astrojs/tailwind": "^5.1.0",
-    "@codemirror/commands": "^6.3.3",
-    "@codemirror/lang-cpp": "^6.0.2",
-    "@codemirror/lang-javascript": "^6.2.1",
-    "@codemirror/lang-python": "^6.1.4",
-    "@codemirror/lang-rust": "^6.0.1",
-    "@codemirror/language": "^6.10.1",
-    "@codemirror/legacy-modes": "^6.3.3",
-    "@codemirror/state": "^6.4.0",
-    "@codemirror/view": "^6.24.0",
-    "@fontsource/jetbrains-mono": "^5.0.18",
-    "@fontsource/literata": "^5.0.18",
-    "@lezer/highlight": "^1.2.0",
-    "alpinejs": "^3.13.5",
-    "astro": "^4.3.5",
-    "astro-expressive-code": "^0.32.4",
-    "axios": "^1.6.7",
-    "codemirror": "^6.0.1",
-    "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "solid-js": "^1.8.14",
-    "style-mod": "^4.1.0",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.5.10",
-    "@types/alpinejs": "^3.13.6",
-    "@types/lodash": "^4.14.202",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
-    "prettier": "^3.2.5",
-    "prettier-plugin-astro": "^0.13.0",
-    "prettier-plugin-tailwindcss": "^0.5.11"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@codemirror/view@6.24.0": "patches/@codemirror__view@6.24.0.patch"
+    "name": "short-spectrum",
+    "type": "module",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "astro check && astro build",
+        "preview": "astro preview",
+        "astro": "astro",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "@astrojs/alpinejs": "^0.4.0",
+        "@astrojs/check": "^0.4.1",
+        "@astrojs/markdoc": "^0.8.3",
+        "@astrojs/react": "^3.0.10",
+        "@astrojs/solid-js": "^4.0.1",
+        "@astrojs/tailwind": "^5.1.0",
+        "@codemirror/commands": "^6.3.3",
+        "@codemirror/lang-cpp": "^6.0.2",
+        "@codemirror/lang-javascript": "^6.2.1",
+        "@codemirror/lang-python": "^6.1.4",
+        "@codemirror/lang-rust": "^6.0.1",
+        "@codemirror/language": "^6.10.1",
+        "@codemirror/legacy-modes": "^6.3.3",
+        "@codemirror/state": "^6.4.0",
+        "@codemirror/view": "^6.24.0",
+        "@fontsource/jetbrains-mono": "^5.0.18",
+        "@fontsource/literata": "^5.0.18",
+        "@lezer/highlight": "^1.2.0",
+        "alpinejs": "^3.13.5",
+        "astro": "^4.3.5",
+        "astro-expressive-code": "^0.32.4",
+        "axios": "^1.6.7",
+        "codemirror": "^6.0.1",
+        "lodash": "^4.17.21",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "solid-js": "^1.8.14",
+        "style-mod": "^4.1.0",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5.3.3"
+    },
+    "devDependencies": {
+        "@tailwindcss/typography": "^0.5.10",
+        "@types/alpinejs": "^3.13.6",
+        "@types/lodash": "^4.14.202",
+        "@types/react": "^18.2.55",
+        "@types/react-dom": "^18.2.19",
+        "prettier": "^3.2.5",
+        "prettier-plugin-astro": "^0.13.0",
+        "prettier-plugin-tailwindcss": "^0.5.11"
+    },
+    "pnpm": {
+        "patchedDependencies": {
+            "@codemirror/view@6.24.0": "patches/@codemirror__view@6.24.0.patch"
+        }
     }
-  }
 }

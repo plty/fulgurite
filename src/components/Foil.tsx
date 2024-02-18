@@ -8,32 +8,32 @@ import _reduce from "lodash/reduce";
 import type { FenceConfig } from "$components/Fencey";
 
 export const parser = {
-  asm: StreamLanguage.define(gas),
-  cpp: cppLanguage,
-  jsx: jsxLanguage,
-  rust: rustLanguage,
-  tsx: tsxLanguage,
+    asm: StreamLanguage.define(gas),
+    cpp: cppLanguage,
+    jsx: jsxLanguage,
+    rust: rustLanguage,
+    tsx: tsxLanguage,
 };
 
 type FoilProp = {
-  code: string;
-  fenceConfig: FenceConfig;
-  lineGroup: { [line: number]: number };
+    code: string;
+    fenceConfig: FenceConfig;
+    lineGroup: { [line: number]: number };
 };
 export const Foil = ({ code, fenceConfig, lineGroup }: FoilProp) => (
-  <Sabre
-    code={code}
-    fenceConfig={fenceConfig}
-    parserHint={parser}
-    lineGroup={lineGroup}
-  />
+    <Sabre
+        code={code}
+        fenceConfig={fenceConfig}
+        parserHint={parser}
+        lineGroup={lineGroup}
+    />
 );
 
 export const FramedFoil = ({ code, fenceConfig, lineGroup }: FoilProp) => (
-  <FramedSabre
-    code={code}
-    fenceConfig={fenceConfig}
-    parserHint={parser}
-    lineGroup={lineGroup}
-  />
+    <FramedSabre
+        code={code}
+        fenceConfig={fenceConfig}
+        parserHint={parser}
+        lineGroup={lineGroup}
+    />
 );

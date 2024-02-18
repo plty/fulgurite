@@ -7,42 +7,46 @@ import { cppCode } from "$utils/constants.ts";
 import { compile } from "$utils/godbolt.ts";
 
 interface Props {
-  content: string;
-  language: Lang;
+    content: string;
+    language: Lang;
 }
 
 const { content, language: infoString } = Astro.props;
 const { state, config } = parseInfo(infoString);
 
 const [compiledCpp] = await Promise.all(
-  [cppCode].map((code) => {
-    return compile(["cpp", "clang1701"], code, {
-      opts: "-std=c++2b -O3 -march=sapphirerapids",
-      asmSyntax: "intel",
-    });
-  }),
+    [cppCode].map((code) => {
+        return compile(["cpp", "clang1701"], code, {
+            opts: "-std=c++2b -O3 -march=sapphirerapids",
+            asmSyntax: "intel",
+        });
+    }),
 );
 
 const hint = { [cppCode]: compiledCpp };
 ---
 
 {
-  state == "fence" && (
-    <div class="text-sm">
-      <FramedFoil code={content} lineGroup={{}} fenceConfig={config} />
-    </div>
-  )
+    state == "fence" && (
+        <div class="text-sm">
+            <FramedFoil code={content} lineGroup={{}} fenceConfig={config} />
+        </div>
+    )
 }
 
 {
-  state == "fulgurite" && (
-    <dev class="my-5 block flex w-full justify-center text-sm">
-      <div class="w-screen max-w-7xl shrink-0 px-4">
-        <div class="h-3 border-x border-b border-t border-night-500 border-night-500 bg-night-600"></div>
-        <div class="border-x border-b border-night-500 bg-night-700 text-sm">
-          <FulguriteIsland hint={hint} fenceConfig={config} client:visible />
-        </div>
-      </div>
-    </dev>
-  )
+    state == "fulgurite" && (
+        <dev class="my-5 block flex w-full justify-center text-sm">
+            <div class="w-screen max-w-7xl shrink-0 px-4">
+                <div class="h-3 border-x border-b border-t border-night-500 border-night-500 bg-night-600" />
+                <div class="border-x border-b border-night-500 bg-night-700 text-sm">
+                    <FulguriteIsland
+                        hint={hint}
+                        fenceConfig={config}
+                        client:visible
+                    />
+                </div>
+            </div>
+        </dev>
+    )
 }

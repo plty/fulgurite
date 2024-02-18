@@ -1,7 +1,7 @@
 import React from "react";
 
 export const TopLevelProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+    children,
 }) => {
-  return <React.StrictMode>{children}</React.StrictMode>;
+    return <React.StrictMode>{children}</React.StrictMode>;
 };
