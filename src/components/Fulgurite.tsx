@@ -1,15 +1,15 @@
-import { compile, type CompileOutput } from "$utils/godbolt";
 import { StreamLanguage } from "@codemirror/language";
 import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _fromPairs from "lodash/fromPairs";
 import _uniq from "lodash/uniq";
 
 import { Blox } from "$components/Blox";
+import { type FulguriteConfig } from "$components/Fencey";
 import { Sabre } from "$components/Sabre";
 import { TopLevelProvider } from "$components/TopLevelProvider";
 import { useHintedPromise } from "$hooks/usePromise";
 import { cppCode } from "$utils/constants";
-import type { FulguriteConfig } from "$components/Fencey";
+import { compile, type CompileOutput } from "$utils/godbolt";
 
 const asmLanguage = StreamLanguage.define(gas);
 
@@ -63,7 +63,7 @@ const Fulgurite = ({
                     readonly: true,
                 }}
             />
-            <div className="border border-l border-night-700">
+            <div className="border-night-700 border border-l">
                 <Sabre
                     code={
                         compileResult?.asm

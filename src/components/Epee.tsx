@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
 
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import {
+    bracketMatching,
+    foldKeymap,
+    indentOnInput,
+} from "@codemirror/language";
 import { Line, RangeSetBuilder, type Extension } from "@codemirror/state";
 import {
     Decoration,
@@ -24,11 +29,6 @@ import {
 } from "$components/editor/lang-support";
 import { nord } from "$components/editor/nord";
 import { useHintedPromise } from "$hooks/usePromise";
-import {
-    bracketMatching,
-    foldKeymap,
-    indentOnInput,
-} from "@codemirror/language";
 
 const visibleLines = (view: EditorView) =>
     view.visibleRanges.flatMap(({ from, to }): Line[] => {

@@ -1,7 +1,7 @@
+import { type FenceConfig } from "$components/Fencey";
 import { Sabre } from "$components/Sabre";
-import { usePromise } from "$hooks/usePromise";
 import { highlighter } from "$components/editor/lang-support";
-import type { FenceConfig } from "$components/Fencey";
+import { usePromise } from "$hooks/usePromise";
 
 type BloxProp = {
     code: string;

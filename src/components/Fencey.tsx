@@ -1,6 +1,7 @@
-import type { Lang } from "$components/editor/lang-support";
-import type { CompilableLang } from "$utils/godbolt";
 import _reduce from "lodash/reduce";
+
+import { type Lang } from "$components/editor/lang-support";
+import { type CompilableLang } from "$utils/godbolt";
 
 const extendedFlags = {
     fastIntel: [

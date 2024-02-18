@@ -1,11 +1,12 @@
-import { FramedSabre, Sabre } from "$components/Sabre";
 import { cppLanguage } from "@codemirror/lang-cpp";
 import { jsxLanguage, tsxLanguage } from "@codemirror/lang-javascript";
 import { rustLanguage } from "@codemirror/lang-rust";
 import { StreamLanguage } from "@codemirror/language";
 import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _reduce from "lodash/reduce";
+
 import type { FenceConfig } from "$components/Fencey";
+import { FramedSabre, Sabre } from "$components/Sabre";
 
 export const parser = {
     asm: StreamLanguage.define(gas),

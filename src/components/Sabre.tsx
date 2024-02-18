@@ -6,11 +6,11 @@ import { Decoration, baseThemeID } from "@codemirror/view";
 import { highlightTree } from "@lezer/highlight";
 import _range from "lodash/range";
 
+import { type FenceConfig } from "$components/Fencey";
 import { parser, type EagerParser } from "$components/editor/lang-support";
 import { nordHighlight } from "$components/editor/nord";
 import { useHintedPromise } from "$hooks/usePromise";
 import { zip } from "$utils/fn";
-import type { FenceConfig } from "$components/Fencey";
 
 const decorations = (
     lang: Language,
