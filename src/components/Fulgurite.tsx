@@ -62,7 +62,7 @@ const Fulgurite = ({
                     readonly: false,
                 }}
             />
-            <div className="border-night-700 border border-l">
+            <div className="border border-l border-night-700">
                 <SabreCore
                     code={
                         compileResult?.asm

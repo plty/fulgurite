@@ -93,8 +93,8 @@ const parseFenceConfig = (init: FenceConfig, rest: string[]) => {
                 return { ...acc, lineNumber: v === "true" };
             } else if (k == "readonly") {
                 return { ...acc, readonly: v === "true" };
-            } else if (k == "framed") {
-                return { ...acc, framed: v as "tabbed" | "framed" | "none" };
+            } else if (k == "frame") {
+                return { ...acc, framed: v as "tabbed" | "none" };
             }
             return acc;
         },

@@ -15,7 +15,6 @@ import {
     crosshairCursor,
     drawSelection,
     dropCursor,
-    highlightActiveLineGutter,
     highlightSpecialChars,
     keymap,
     lineNumbers,
@@ -88,7 +87,6 @@ const showStripes = (lineGroup: { [line: number]: number }): Extension => {
 
 const baseExtensions = [
     lineNumbers(),
-    highlightActiveLineGutter(),
     highlightSpecialChars(),
     history(),
     drawSelection(),

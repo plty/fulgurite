@@ -1,7 +1,7 @@
-import {StrictMode} from "react";
+import React from "react";
 
 export const TopLevelProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    return <StrictMode>{children}</StrictMode>;
+    return <React.StrictMode>{children}</React.StrictMode>;
 };

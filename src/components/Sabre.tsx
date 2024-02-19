@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import type { HighlightStyle, Language } from "@codemirror/language";
 import { Line, RangeSet, RangeSetBuilder, Text } from "@codemirror/state";
-import { Decoration, baseThemeID } from "@codemirror/view";
+import { Decoration, baseDarkID, baseThemeID } from "@codemirror/view";
 import { highlightTree } from "@lezer/highlight";
 import _range from "lodash/range";
 
@@ -137,48 +137,47 @@ export const SabreCore = ({
         [langParser, highlightStyle, code],
     );
     const lines = Text.of(code.split("\n"));
+    {
+        /* ͼsg is currently hackish, parseInt("sg", 36) == 1024 which is basically themeID of nord. */
+    }
     return (
-        <div className={`${baseThemeID} max-h-[600px] overflow-y-auto`}>
-            <div className="cm-editor gutter ͼsg">
-                <div className="cm-scroller">
-                    <div className="cm-gutters select-none">
-                        {lineNumber && (
-                            <div className="cm-gutter cm-lineNumbers">
-                                {_range(lines.lines).map((i) => (
-                                    // HACK: investigate root issue of 4px magic
-                                    <div
-                                        key={i}
-                                        className="cm-gutterElement"
-                                        style={
-                                            i == 0 ? { marginTop: "4px" } : {}
-                                        }
-                                    >
-                                        {i + 1}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    <div key={"content"} className="cm-content">
-                        {_range(lines.lines)
-                            .map((i): [Line, number] => [
-                                lines.line(i + 1),
-                                lg[i + 1],
-                            ])
-                            .map(([line, g]) => (
-                                <CodeLine
-                                    key={line.number}
-                                    line={lines.sliceString(line.from, line.to)}
-                                    marks={marks(decors, line)}
-                                    bg={
-                                        line.number in lg
-                                            ? colorOf(g, g == hlGroup ? 35 : 15)
-                                            : "transparent"
-                                    }
-                                    onClick={() => setHlGroup(g)}
-                                ></CodeLine>
+        <div className={`cm-editor gutter ${baseThemeID} ${baseDarkID} ͼsg`}>
+            <div className="cm-scroller">
+                <div className="cm-gutters select-none">
+                    {lineNumber && (
+                        <div className="cm-gutter cm-lineNumbers">
+                            {_range(lines.lines).map((i) => (
+                                // HACK: investigate root issue of 4px magic
+                                <div
+                                    key={i}
+                                    className="cm-gutterElement"
+                                    style={i == 0 ? { marginTop: "4px" } : {}}
+                                >
+                                    {i + 1}
+                                </div>
                             ))}
-                    </div>
+                        </div>
+                    )}
+                </div>
+                <div key={"content"} className="cm-content">
+                    {_range(lines.lines)
+                        .map((i): [Line, number] => [
+                            lines.line(i + 1),
+                            lg[i + 1],
+                        ])
+                        .map(([line, g]) => (
+                            <CodeLine
+                                key={line.number}
+                                line={lines.sliceString(line.from, line.to)}
+                                marks={marks(decors, line)}
+                                bg={
+                                    line.number in lg
+                                        ? colorOf(g, g == hlGroup ? 35 : 15)
+                                        : "transparent"
+                                }
+                                onClick={() => setHlGroup(g)}
+                            ></CodeLine>
+                        ))}
                 </div>
             </div>
         </div>
@@ -191,7 +190,7 @@ export const Sabre = ({
     parserHint,
     lineGroup,
 }: SabreProp) => {
-    return (
+    return fenceConfig.frame == "tabbed" ? (
         <div>
             <div className="border-night-500 flex border-x border-t">
                 <div className="border-frost-3 bg-night-700 line-clamp-1 border-t-2 px-6 py-1 font-mono">
@@ -208,5 +207,12 @@ export const Sabre = ({
                 />
             </div>
         </div>
+    ) : (
+        <SabreCore
+            code={code}
+            lineGroup={lineGroup}
+            fenceConfig={fenceConfig}
+            parserHint={parserHint}
+        />
     );
 };
