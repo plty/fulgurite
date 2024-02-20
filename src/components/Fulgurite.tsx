@@ -7,21 +7,18 @@ import { Blox } from "$components/Blox";
 import { type FulguriteConfig } from "$components/Fencey";
 import { SabreCore } from "$components/Sabre";
 import { useHintedPromise } from "$hooks/usePromise";
-import { cppCode } from "$utils/constants";
 import { compile, type CompileOutput } from "$utils/godbolt";
 
 const asmLanguage = StreamLanguage.define(gas);
 
-const Fulgurite = ({
-    code,
-    hint,
-    fulguriteConfig,
-}: {
+type FulguriteProp = {
     code: string;
     setCode: (_: string) => void;
     hint: { [code: string]: CompileOutput };
     fulguriteConfig: FulguriteConfig;
-}) => {
+};
+
+export const Fulgurite = ({ code, hint, fulguriteConfig }: FulguriteProp) => {
     const { value: compileResult } = useHintedPromise(
         hint,
         () =>
@@ -62,12 +59,12 @@ const Fulgurite = ({
                     readonly: false,
                 }}
             />
-            <div className="border border-l border-night-700">
+            <div className="border-night-700 border border-l">
                 <SabreCore
                     code={
                         compileResult?.asm
                             ?.map((line) => line.text)
-                            .join("\n") ?? "<Compiling>"
+                            ?.join("\n") ?? "<Compiling>"
                     }
                     parserHint={{ asm: asmLanguage }}
                     fenceConfig={{
@@ -91,20 +88,3 @@ const Fulgurite = ({
         </div>
     );
 };
-
-export const FulguriteIsland = ({
-    hint,
-    fenceConfig,
-}: {
-    hint: { [code: string]: CompileOutput };
-    fenceConfig: FulguriteConfig;
-}) => (
-    <Fulgurite
-        hint={hint}
-        code={cppCode}
-        setCode={() => {}}
-        fulguriteConfig={fenceConfig}
-    />
-);
-
-export default FulguriteIsland;

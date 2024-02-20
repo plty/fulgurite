@@ -51,9 +51,7 @@ export const useHintedPromise = function <T extends PropertyKey, U>(
     useEffect(() => {
         let stale = false;
         promise
-            .then((v) => {
-                !stale && setState(resolve(v));
-            })
+            .then((v) => !stale && setState(resolve(v)))
             .catch((e) => !stale && setState(reject(e)));
         return () => {
             stale = true;

@@ -39,23 +39,23 @@ export const compile = async (
     opts?: CompileOpts,
 ): Promise<CompileOutput> => {
     const r = await godbolt.post(`/compiler/${compiler}/compile`, {
-        source: code,
-        compiler: compiler,
-        bypassCache: false,
         allowStoreCodeDebug: false,
+        bypassCache: false,
+        compiler: compiler,
+        source: code,
         options: {
-            userArguments: opts?.opts,
             filters: {
                 binary: false,
+                commentOnly: true,
+                demangle: true,
+                directives: true,
                 execute: true,
                 intel: opts?.asmSyntax === "intel",
-                demangle: true,
                 labels: true,
                 libraryCode: false,
-                directives: true,
-                commentOnly: true,
                 trim: false,
             },
+            userArguments: opts?.opts,
         },
     });
     return r.data;

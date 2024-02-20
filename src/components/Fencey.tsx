@@ -17,11 +17,11 @@ const extendedFlags = {
         "-march=znver4",
     ],
     asan: ["-fsanitize=address", "-fno-omit-frame-pointer"],
-    tsan: ["-fsanitize=thread"],
-    msan: ["-fsanitize=memory"],
-    ubsan: ["-fsanitize=undefined"],
     dfsan: ["-fsanitize=dataflow"],
     lsan: ["-fsanitize=leak"],
+    msan: ["-fsanitize=memory"],
+    tsan: ["-fsanitize=thread"],
+    ubsan: ["-fsanitize=undefined"],
 } as { [k: string]: string[] };
 
 export type FenceConfig = {
@@ -92,7 +92,7 @@ const parseFenceConfig = (init: FenceConfig, rest: string[]) => {
             } else if (k == "linenumber") {
                 return { ...acc, lineNumber: v === "true" };
             } else if (k == "readonly") {
-                return { ...acc, readonly: v === "true" };
+                return { ...acc, readonly: v === "false" };
             } else if (k == "frame") {
                 return { ...acc, framed: v as "tabbed" | "none" };
             }
@@ -132,7 +132,7 @@ export const parseInfo = (s: string): Config => {
 
     const compileOpts = compileOptShorts
         ?.split(",")
-        .flatMap((x) => extendedFlags[x]);
+        ?.flatMap((x) => extendedFlags[x]);
     return {
         state: "fulgurite",
         config: parseFulguriteConfig(

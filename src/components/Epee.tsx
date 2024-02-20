@@ -12,7 +12,6 @@ import {
     EditorView,
     ViewPlugin,
     ViewUpdate,
-    crosshairCursor,
     drawSelection,
     dropCursor,
     highlightSpecialChars,
@@ -93,7 +92,6 @@ const baseExtensions = [
     dropCursor(),
     indentOnInput(),
     bracketMatching(),
-    crosshairCursor(),
     keymap.of([...defaultKeymap, ...historyKeymap, ...foldKeymap]),
 ];
 

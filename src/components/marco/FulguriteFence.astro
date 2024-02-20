@@ -1,0 +1,36 @@
+---
+import { type FulguriteConfig } from "$components/Fencey.tsx";
+import { Fulgurite } from "$components/Fulgurite.tsx";
+import { compile } from "$utils/godbolt.ts";
+
+interface Props {
+    content: string;
+    config: FulguriteConfig;
+}
+
+const { content, config } = Astro.props;
+const hint = {
+    [content]: await compile(["cpp", "clang1701"], content, {
+        opts: config.compileOpts.join(" "),
+        asmSyntax: "intel",
+    }),
+};
+---
+
+<div class="my-5 flex justify-center text-sm">
+    <div class="w-screen max-w-7xl shrink-0 px-4">
+        <div
+            class="border-night-500 bg-night-600 h-3 border-x border-b border-t"
+        >
+        </div>
+        <div class="border-night-500 bg-night-700 border-x border-b text-sm">
+            <Fulgurite
+                code={content}
+                setCode={() => {}}
+                hint={hint}
+                fulguriteConfig={config}
+                client:visible
+            />
+        </div>
+    </div>
+</div>

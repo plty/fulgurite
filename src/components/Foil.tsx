@@ -21,6 +21,7 @@ type FoilProp = {
     fenceConfig: FenceConfig;
     lineGroup: { [line: number]: number };
 };
+
 export const Foil = ({ code, fenceConfig, lineGroup }: FoilProp) => (
     <Sabre
         code={code}
