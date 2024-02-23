@@ -1,35 +1,66 @@
 ---
-unique_id: 32595503-C0ED-4D35-9E7A-838476F6E74E
+unique_id: 42AF19EF-8AC9-42A4-9D95-1765E8F3EC25
 short_id: custom-hooks
 title: How I Built This Blog
 ---
 
-# because 𝕪 not
+# How I Built This Blog
 
-## Obsession with web performance
-Surma and Jake of [HTTP203](youtube.com) got me excited with web performance.
+I always wanted to have a blog, but I never got around to it. This is a
+culmination of what I love from web as a platform. I love the web, and I love
+the idea of having a space to write my thoughts and rants.
 
-```cpp[fastAmd];title=simple.cpp
-#include <iostream>
-#include <stdint.h>
-#include <limits>
+## choices
 
-constexpr auto f(uint64_t const& x) -> uint64_t {
-    return x < 2 ? x : f(x - 1) + f(x - 2);
-}
+### markdoc
 
-constexpr auto g(uint64_t const& x) -> uint64_t {
-    return x == 0 ? 1 : x * g(x - 1);
-}
+I want a good authoring story, I like the extensibility of
+[MDX](https://mdxjs.com/), but I don't like the fact that it resorts to
+[JSX](https://mdxjs.com/docs/what-is-mdx/#jsx). I want something that feels
+truthful to daringfireball's markdown manifesto. I want something that is rich,
+but publishable as-is. [Markdoc](https://markdoc.dev/) fits the bill.
 
-auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t {
-    return new_v - old_v;
-}
+> The idea is that a Markdown-formatted document should be publishable as-is,
+> as plain text, without looking like it’s been marked up with tags or
+> formatting instructions.
+
+> Markdoc is a Markdown-based document format and a framework for content
+> publishing. It was designed internally at Stripe to meet the needs of our
+> user-facing product documentation. Markdoc extends Markdown with a custom
+> syntax for tags and annotations, providing a way to tailor content to
+> individual users and introduce interactive elements.
+
+### astro
+
+Astro is a new (well, it was new in 2022) static site generator that I've been
+following for a while. It's a static site generator that is built with the
+modern web in mind. It's fast, it's extensible, it does SSR and SSG. It's also
+built with the idea of "bring your own framework". I love Svelte for its
+simplicity and speed, React for its ecosystem. Astro allows me to use both.
+
+### codemirror
+
+I spent ~~a lot of~~ way too much time writing SSR-friendly codemirror. The
+code block below is fully rendered server-side. This current page first load,
+is under 30KB with 10KB of it being Alpine.js. This code block is blazing-fast
+and server-rendered. When I want the code to be editable for the user, it
+serves a static version of the fence and swaps its implementation to a
+client-side one after the js is loaded. No flash of unstyled content and a fast
+initial load.
+
+```jsx;title=useSSR.jsx
+export const useSSR = () => {
+    const [state, setState] = useState<boolean>(true);
+    useEffect(() => setState(false), []);
+    return state;
+};
 ```
 
-I spent ~~a lot of~~ way too much time on web-performance and SSR, nearlly all
-of the things are lazily-loaded. language parser, syntax-highlighter. For it
-to be lazy and fast, there's this idea of hinting.
+Language parsers and highlighters has to be loaded lazily to keep the initial
+load fast. But for it to be renderable server-side it has to be available right
+away, useHintedPromise to the rescue. It's a custom hook that allows me to hint
+the promise result to be available right away. Astro simply passes in the right
+hint as astro knows on server-time what the content language is.
 
 ```jsx;title=useHintedPromise.jsx
 export const useHintedPromise = function <T extends PropertyKey, U>(
@@ -51,9 +82,7 @@ export const useHintedPromise = function <T extends PropertyKey, U>(
     useEffect(() => {
         let stale = false;
         promise
-            .then((v) => {
-                !stale && setState(resolve(v));
-            })
+            .then((v) => !stale && setState(resolve(v)))
             .catch((e) => !stale && setState(reject(e)));
         return () => {
             stale = true;
@@ -63,11 +92,13 @@ export const useHintedPromise = function <T extends PropertyKey, U>(
 };
 ```
 
-basically writing static-version of codemirror to make it render without js
-and swaps the element with the real codemirror when it is loaded. I also
-making sure my site still works on a slow 3G connection, without JS.
+### godbolt
 
-```cpp;title=simple.cpp
+Godbolt is an amazing tool, it gives a lot of perspective on how the code is
+compiled. I wanted to have a way to embed goldbolt-like experience in my blog.
+I spent way too much time trying to understand how codemirror works :/
+
+```cpp[fastAmd];title=simple.cpp
 #include <iostream>
 #include <stdint.h>
 #include <limits>
@@ -80,21 +111,64 @@ constexpr auto g(uint64_t const& x) -> uint64_t {
     return x == 0 ? 1 : x * g(x - 1);
 }
 
-auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t{
+auto delta(uint64_t const& old_v, uint64_t const& new_v) -> uint64_t {
     return new_v - old_v;
 }
 ```
 
-## Pwoblems :(
+## fun pwoblewms
 
-This got in the way of us
+### Codemirror CSS generation
+
+Codemirror internally uses `style-mod` it's pretty interesting as to use it you
+basically declare a CSS class programatically, and all you do is assign that
+CSS class to the components. How it works is it creates a style tag and appends
+it to the head. To prevent collision with other css classes it has `ͼ` as
+prefix. As I can't afford generating the CSS client-side for SSR I had to
+generate it server-side and just put it on a style tag, fully knowing that when
+codemirror is loaded on client-side it will generate the same CSS agains.
 
 ```jsx;title=style-mod.js;lineNumber=false
-  const top = typeof globalThis != "undefined" ? globalThis : typeof window != "undefined" ? window : {}
+const top = typeof globalThis != "undefined" ? globalThis : typeof window != "undefined" ? window : {}
 
-  static newName() {
-    let id = top[COUNT] || 1
-    top[COUNT] = id + 1
-    return C + id.toString(36)
-  }
+class StyleModule {
+    ...
+    static newName() {
+        let id = top[COUNT] || 1
+        top[COUNT] = id + 1
+        return "ͼ" + id.toString(36)
+    }
+}
 ```
+
+I noticed some strange styling behavior when I have a client-side block, and a
+server-side block. Apparently it generates different CSS classes. Albeit
+looking deterministic as it allocates using auto-increment instead of pure
+randomness, it triggers a bug of astro / vite.
+
+```jsx;title=example.js;
+const unusedX = StyleModule.newName();
+const usedY = StyleModule.newName();
+```
+
+Consider this example, on SSR usedY resolves to 2, but on client-side it
+resolves to 1. As vite dead-code elimination is trying to be smart and remove
+it. now components that are server-rendered and client-rendered will have
+different CSS classes.
+
+```jsx;title=theme.ts
+export const createTheme = (
+    start: number,
+    options: CreateThemeOptions,
+): ThemePack => {
+    const lastCount = StyleModule.getCount();
+    StyleModule.setCount(start);
+    const theme = createUnseededTheme(options);
+    StyleModule.setCount(lastCount);
+    return theme;
+};
+```
+
+the code is hacktacular, I patched style-mod to expose the counter
+(`pnpm patch` is amazing) so that when I create the
+text-editor theme the classes will be allocated from start, start + 1, ... regardless of server-side or client-side

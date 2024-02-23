@@ -7,6 +7,7 @@ import {
 } from "@codemirror/language";
 import type { Extension } from "@codemirror/state";
 import { EditorView } from "codemirror";
+import { StyleModule } from "style-mod";
 
 type CreateThemeOptions = {
     theme: Theme;
@@ -32,7 +33,7 @@ type ThemePack = {
     extension: Extension;
 };
 
-export const createTheme = ({
+const createUnseededTheme = ({
     theme,
     settings,
     styles,
@@ -83,4 +84,15 @@ export const createTheme = ({
         highlightStyle,
         extension: [themeStyle, syntaxHighlighting(highlightStyle)],
     };
+};
+
+export const createTheme = (
+    seed: number,
+    options: CreateThemeOptions,
+): ThemePack => {
+    const lastCount = StyleModule.getCount();
+    StyleModule.setCount(seed);
+    const theme = createUnseededTheme(options);
+    StyleModule.setCount(lastCount);
+    return theme;
 };

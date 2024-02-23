@@ -1,4 +1,5 @@
 import { StreamLanguage } from "@codemirror/language";
+
 import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _fromPairs from "lodash/fromPairs";
 import _uniq from "lodash/uniq";
@@ -44,7 +45,7 @@ export const Fulgurite = ({ code, hint, fulguriteConfig }: FulguriteProp) => {
     return (
         <div
             className={
-                "grid grid-cols-1 place-items-stretch space-y-2 text-sm md:space-y-0 lg:grid-cols-2"
+                "grid grid-cols-1 place-items-stretch space-y-2 text-sm lg:grid-cols-2 lg:space-y-0"
             }
         >
             <Blox
@@ -56,10 +57,10 @@ export const Fulgurite = ({ code, hint, fulguriteConfig }: FulguriteProp) => {
                     del: [],
                     frame: "none",
                     lineNumber: true,
-                    readonly: false,
+                    readonly: true,
                 }}
             />
-            <div className="border-night-700 border border-l">
+            <div className="border-polar-700 border-t lg:border-l lg:border-t-0">
                 <SabreCore
                     code={
                         compileResult?.asm

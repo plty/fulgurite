@@ -192,13 +192,13 @@ export const Sabre = ({
 }: SabreProp) => {
     return fenceConfig.frame == "tabbed" ? (
         <div>
-            <div className="border-night-500 flex border-x border-t">
-                <div className="border-frost-3 bg-night-700 line-clamp-1 border-t-2 px-6 py-1 font-mono">
+            <div className="border-polar-600 flex border-x border-t">
+                <div className="border-f-bluish bg-polar-800 line-clamp-1 border-t-2 px-6 py-1 font-mono">
                     {fenceConfig.filename}
                 </div>
-                <div className="border-night-500 bg-night-600 flex-grow border-b border-l" />
+                <div className="border-polar-600 bg-polar-700 flex-grow border-b border-l" />
             </div>
-            <div className="border-night-500 border-x border-b text-sm">
+            <div className="border-polar-600 border-x border-b text-sm">
                 <SabreCore
                     code={code}
                     lineGroup={lineGroup}

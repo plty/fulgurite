@@ -1,6 +1,7 @@
 import { cppLanguage } from "@codemirror/lang-cpp";
 import { jsxLanguage, tsxLanguage } from "@codemirror/lang-javascript";
 import { rustLanguage } from "@codemirror/lang-rust";
+import { markdownLanguage } from "@codemirror/lang-markdown";
 import { StreamLanguage } from "@codemirror/language";
 import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _reduce from "lodash/reduce";
@@ -14,6 +15,7 @@ export const parser = {
     jsx: jsxLanguage,
     rust: rustLanguage,
     tsx: tsxLanguage,
+    md: markdownLanguage,
 };
 
 type FoilProp = {

@@ -3,30 +3,27 @@ export default {
     theme: {
         extend: {
             colors: {
-                night: {
-                    400: "#4c566a",
-                    500: "#434c5e",
-                    600: "#3b4252",
-                    700: "#2e3440",
-                    800: "#242933",
+                polar: {
+                    100: "#d8dee9",
+                    200: "#e5e9f0",
+                    300: "#eceff4",
+                    500: "#4c566a",
+                    600: "#434c5e",
+                    700: "#3b4252",
+                    800: "#2e3440",
+                    900: "#242933",
                 },
-                snow: {
-                    0: "#d8dee9",
-                    1: "#e5e9f0",
-                    2: "#eceff4",
-                },
-                frost: {
-                    0: "#8fbcbb",
-                    1: "#88c0d0",
-                    2: "#81a1c1",
-                    3: "#5e81ac",
-                },
-                // aurora in basic color terms
-                "aurora-red": "#bf616a",
-                "aurora-orange": "#d08770",
-                "aurora-yellow": "#ebcb8b",
-                "aurora-green": "#a3be8c",
-                "aurora-purple": "#b48ead",
+                // frost
+                "f-greenest": "#8fbcbb",
+                "f-greenish": "#88c0d0",
+                "f-bluish": "#81a1c1",
+                "f-bluest": "#5e81ac",
+                // aurora
+                blush: "#bf616a",
+                apricot: "#d08770",
+                lemon: "#ebcb8b",
+                sage: "#a3be8c",
+                lilac: "#b48ead",
             },
         },
     },

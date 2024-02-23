@@ -20,6 +20,8 @@ export const highlighter = {
             jsx: true,
             typescript: true,
         }) as Extension,
+    md: async () =>
+        (await import("@codemirror/lang-markdown")).markdown() as Extension,
 };
 export type EagerHighlighter = {
     [T in Lang]: Extension;
@@ -38,6 +40,9 @@ export const parser = {
         (await import("@codemirror/lang-rust")).rustLanguage as Language,
     tsx: async () =>
         (await import("@codemirror/lang-javascript")).tsxLanguage as Language,
+    md: async () =>
+        (await import("@codemirror/lang-markdown"))
+            .markdownLanguage as Language,
 };
 export type EagerParser = {
     [T in Lang]: Language;
