@@ -1,7 +1,7 @@
 import { type FenceConfig } from "$components/Fencey";
 import { highlighter } from "$components/editor/lang-support";
 import { usePromise } from "$hooks/usePromise";
-import { Foil } from "./Foil";
+// import { Foil } from "./Foil";
 
 type BloxProp = {
     code: string;
@@ -12,7 +12,7 @@ type BloxProp = {
 export const Blox = ({ code, fenceConfig, lineGroup }: BloxProp) => {
     const { lang, readonly } = fenceConfig;
     const { state: epeeState, value: Epee } = usePromise(
-        async () => (await import("$components/Epee")).Epee,
+        async () => (await import("$react/Epee")).Epee,
         [],
     );
     const { state: hlState, value: hl } = usePromise(highlighter[lang], [lang]);
@@ -29,13 +29,13 @@ export const Blox = ({ code, fenceConfig, lineGroup }: BloxProp) => {
                     readonly={readonly}
                 />
             )}
-            {(epeeState !== "resolve" || hlState !== "resolve") && (
+            {/* {(epeeState !== "resolve" || hlState !== "resolve") && (
                 <Foil
                     code={code}
                     fenceConfig={fenceConfig}
                     lineGroup={lineGroup}
                 />
-            )}
+            )} */}
         </>
     );
 };

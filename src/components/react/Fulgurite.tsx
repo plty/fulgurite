@@ -4,9 +4,9 @@ import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _fromPairs from "lodash/fromPairs";
 import _uniq from "lodash/uniq";
 
-import { Blox } from "$components/Blox";
+import { Blox } from "$react/Blox";
 import { type FulguriteConfig } from "$components/Fencey";
-import { SabreCore } from "$components/Sabre";
+import { SabreCore } from "$react/Sabre";
 import { useHintedPromise } from "$hooks/usePromise";
 import { compile, type CompileOutput } from "$utils/godbolt";
 

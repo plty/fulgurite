@@ -7,7 +7,7 @@ import { gas } from "@codemirror/legacy-modes/mode/gas";
 import _reduce from "lodash/reduce";
 
 import type { FenceConfig } from "$components/Fencey";
-import { Sabre } from "$components/Sabre";
+import { Sabre } from "$react/Sabre";
 
 export const parser = {
     asm: StreamLanguage.define(gas),
